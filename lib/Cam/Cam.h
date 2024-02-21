@@ -14,6 +14,7 @@ class Cam{
         int getCamdata();
         float ang;
         float Size;
+        int side;
         int on = 0;
         int color = 0;
         int senter;

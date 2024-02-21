@@ -41,7 +41,7 @@ int Neo_p = 999;
 
 Adafruit_NeoPixel pixels(DELAYVAL, PIN, NEO_GRB + NEO_KHZ800);
 //======================================================カメラ======================================================//
-int goal_color = 1;  //青が0 黄色が1
+int goal_color = 0;  //青が0 黄色が1
 Cam cam_front(4);
 Cam cam_back(3);
 //======================================================スタートスイッチ======================================================//
@@ -88,6 +88,9 @@ void loop() {
   Main.reset();
   ball.getBallposition();
   cam_front.getCamdata();
+  cam_back.getCamdata();
+
+
   float AC_val = 100;
   angle go_ang(ball.ang,true);
   int max_val = go_val;
@@ -105,7 +108,13 @@ void loop() {
       A = 5;
     }
     else{
-      A = 20;
+      if(cam_back.on == 0){
+        A = 15;
+      }
+      else{
+        A = 20;
+      }
+      
     }
   }
 
@@ -176,6 +185,17 @@ void loop() {
     }
   }
 
+
+  if(A == 15){
+    if(A != B){
+      B = A;
+    }
+
+    if(cam_back.side == 0){
+
+    }
+  }
+
   if(A == 20){
     if(A != B){
       B = A;
@@ -225,27 +245,29 @@ void loop() {
   digitalWrite(LED,cam_front.on);
 
   if(M_flag == 1){
-    MOTOR.moveMotor_L(go_ang,max_val,AC_val,line);
+    // MOTOR.moveMotor_L(go_ang,max_val,AC_val,line);
   }
   else if(M_flag == 0){
     MOTOR.motor_0();
   }
   else if(M_flag == 2){
-    MOTOR.moveMotor_0(go_ang,max_val,AC_val,0);
+    // MOTOR.moveMotor_0(go_ang,max_val,AC_val,0);
   }
   if(print_flag == 1){
-    Serial.print(" | ");
-    Serial.print(go_ang.degree);
+    // Serial.print(" | ");
+    // Serial.print(go_ang.degree);
     // Serial.print(" | ");
     // ball.print();
-    Serial.print(" | ");
-    line.print();
-    Serial.print(" | ");
+    // Serial.print(" | ");
+    // line.print();
+    // Serial.print(" | ");
     // line.print_2();
     // Serial.print(" | ");
-    ac.print();
-    Serial.print(" | ");
+    // ac.print();
+    // Serial.print(" | ");
     // cam_front.print();
+    Serial.print(" | ");
+    cam_back.print();
     // Serial.print(" | ");
     // Serial.print(L_time);
     // Serial.print(" | ");
@@ -322,9 +344,10 @@ void serialEvent3(){
   }
 
   for(int i = 0; i < 6; i++){
-    // Serial.print(" ");
-    // Serial.print(reBuf[i]);
+    Serial.print(" ");
+    Serial.print(reBuf[i]);
   }
+  Serial.println();
 }
 
 

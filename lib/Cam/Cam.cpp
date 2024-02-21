@@ -34,6 +34,12 @@ int Cam::getCamdata(){
         ang = ang_.demandAve((data_byte[1] - 80)*3/4);
         Size = data_byte[2];
         senter = data_byte[3];
+        if(ang < 0){
+            side = 0;
+        }
+        else{
+            side = 1;
+        }
       }
     }
     return on;
@@ -51,5 +57,7 @@ void Cam::print(){
         Serial.print(Size);
         Serial.print(" senter : ");
         Serial.print(senter);
+        Serial.print(" side : ");
+        Serial.print(side);
     }
 }
