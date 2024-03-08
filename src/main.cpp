@@ -172,6 +172,7 @@ void loop() {
     }
     else{                              //横に進むとき
       MOTOR.line_val = 0.90;
+      MOTOR.line_val = 3;
     }
 
     for(int i = 0; i < 2; i++){
@@ -245,17 +246,17 @@ void loop() {
   digitalWrite(LED,cam_front.on);
 
   if(M_flag == 1){
-    // MOTOR.moveMotor_L(go_ang,max_val,AC_val,line);
+    MOTOR.moveMotor_L(go_ang,max_val,AC_val,line);
   }
   else if(M_flag == 0){
-    MOTOR.motor_0();
+    MOTOR.motor_ac(AC_val);
   }
   else if(M_flag == 2){
-    // MOTOR.moveMotor_0(go_ang,max_val,AC_val,0);
+    MOTOR.moveMotor_0(go_ang,max_val,AC_val,0);
   }
   if(print_flag == 1){
-    // Serial.print(" | ");
-    // Serial.print(go_ang.degree);
+    Serial.print(" | ");
+    Serial.print(go_ang.degree);
     // Serial.print(" | ");
     // ball.print();
     // Serial.print(" | ");
@@ -266,18 +267,18 @@ void loop() {
     // ac.print();
     // Serial.print(" | ");
     // cam_front.print();
-    Serial.print(" | ");
-    cam_back.print();
+    // Serial.print(" | ");
+    // cam_back.print();
     // Serial.print(" | ");
     // Serial.print(L_time);
     // Serial.print(" | ");
     // Serial.print(M_time);
   }
 
-  // if(toogle_f != digitalRead(toogle_P)){
-  //   MOTOR.motor_0();
-  //   Switch();
-  // }
+  if(toogle_f != digitalRead(toogle_P)){
+    MOTOR.motor_0();
+    Switch();
+  }
   Serial.println();
   M_time = Main.read_us();
 }
@@ -285,24 +286,17 @@ void loop() {
 
 
 void Switch(){
-  // digitalWrite(LED,HIGH);
-  // toogle_f = digitalRead(toogle_P);
-  // delay(100);
-  // while(digitalRead(toogle_P) == toogle_f);
-  // digitalWrite(LED,LOW);
-  // ac.setup_2();
-  // Target_dir = ac.dir_n;
-  // toogle_f = digitalRead(toogle_P);
-  // delay(100);
-  // while(digitalRead(toogle_P) == toogle_f);
-  // toogle_f = digitalRead(toogle_P);  //トグルがもげちゃったからいったんLチカでスタート
   digitalWrite(LED,HIGH);
-  delay(1000);
+  toogle_f = digitalRead(toogle_P);
+  delay(100);
+  while(digitalRead(toogle_P) == toogle_f);
   digitalWrite(LED,LOW);
   ac.setup_2();
   Target_dir = ac.dir_n;
-  delay(1000);
-  digitalWrite(LED,HIGH);
+  toogle_f = digitalRead(toogle_P);
+  delay(100);
+  while(digitalRead(toogle_P) == toogle_f);
+  toogle_f = digitalRead(toogle_P);  //トグルがもげちゃったからいったんLチカでスタート
 }
 
 

@@ -28,7 +28,7 @@ void motor_attack::moveMotor_L(angle ang,int val,double ac_val,LINE line){  //�
   max_val -= ac_val;  //姿勢制御とその他のモーターの値を別に考えるために姿勢制御の値を引いておく
   
   for(int i = 0; i < 4; i++){
-    Mval[i] = -mSin[i] *(mval_x + line.dis_X * line_val)  + mCos[i] *(mval_y + line.dis_Y * line_val);
+    Mval[i] = -mSin[i] *(mval_x)  + mCos[i] *(mval_y);
 
     if(abs(Mval[i]) > g){  //絶対値が一番高い値だったら
       g = abs(Mval[i]);    //一番大きい値を代入
@@ -48,6 +48,10 @@ void motor_attack::moveMotor_L(angle ang,int val,double ac_val,LINE line){  //�
   for(int i = 0; i < 4; i++){  //モーターの値を計算するところだよ
     Mval[i] = Mval[i] / h * max_val + ac_val;  //モーターの値を計算(進みたいベクトルの値と姿勢制御の値を合わせる)
     Moutput(i,Mval[i]);
+    Serial.print(i);
+    Serial.print(" : ");
+    Serial.print(Mval[i]);
+    Serial.print(" : ");
   }
 }
 
