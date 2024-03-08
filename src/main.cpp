@@ -108,16 +108,8 @@ void loop() {
 
 
   c = 0;
-  if(A == 15){
-    if(line_F != 3){
-      c = 1;
-    }
-    else{
-      line_F = 0;
-    }
-  }
 
-  if(45 < abs(line.ang) && abs(line.ang) < 135){
+  if((45 < abs(line.ang) && abs(line.ang) < 135) && cam_back.on == 1 && cam_back.Size < 60){
     Lside_A = 1;
   }
   else{
@@ -131,6 +123,7 @@ void loop() {
     }
     if(5000 < L_.read_ms()){
       A = 15;
+      line_F = 1;
     }
   }
   else{
@@ -139,13 +132,18 @@ void loop() {
     }
   }
 
+  if(A == 15){
+    if(line_F != 3){
+      c = 1;
+    }
+    else{
+      line_F = 0;
+    }
+  }
+
   if(c == 0){
     if(line_flag == 1){
       A = 10;
-      if(45 < abs(line.ang) && abs(line.ang) < 135){
-        A = 15;
-        line_F = 1;
-      }
     }
     else{
       if(ball.flag == 0){
@@ -199,26 +197,29 @@ void loop() {
     go_ang = go_border[go_flag] + 90;  //進む角度決定
     go_ang.to_range(180,true);  //進む角度を-180 ~ 180の範囲に収める
 
+    int back_F = 0;
 
-    if(120 < abs(go_ang.degree)){       //進む角度が真後ろにあるとき
+    if(135 < abs(go_ang.degree)){       //進む角度が真後ろにあるとき
+      go_ang += 180;
+      back_F = 1;
+    }
+    else if(120 < abs(go_ang.degree)){
       M_flag = 0;
     }
     else if(abs(go_ang.degree) < 60){  //前めに進むとき
       MOTOR.line_val = 2;
     }
     else{                              //横に進むとき
-      MOTOR.line_val = 1.0;
+      MOTOR.line_val = 0.8;
     }
 
     for(int i = 0; i < 2; i++){
       int dif_val = abs(ball.ang - go_border[i]);
-      if(dif_val < stop_range){  //正面方向にボールがあったら停止するよ
+      if(dif_val < stop_range && back_F == 0){  //正面方向にボールがあったら停止するよ
         M_flag = 0;
       }
-      else if(dif_val < P_range){
-        max_val = max_val / (P_range - stop_range) * (dif_val - stop_range);
-      }
     }
+    go_ang.to_range(180,true);  //進む角度を-180 ~ 180の範囲に収める
   }
 
 
@@ -236,7 +237,7 @@ void loop() {
         line_F++;
       }
     }
-    go_ang = cam_back.ang + 180;
+    go_ang = -cam_back.ang + 180;
   }
 
   if(A == 20){
@@ -296,14 +297,20 @@ void loop() {
 
 
   if(print_flag == 1){
+    // Serial.print(" | L_ : ");
+    // Serial.print(L_.read_ms());
+    // Serial.print(" | Lside_A : ");
+    // Serial.print(Lside_A);
+    Serial.print(" | A : ");
+    Serial.print(A);
     Serial.print(" | ");
     Serial.print(go_ang.degree);
-    Serial.print(" | line_val : ");
-    Serial.print(MOTOR.line_val);
-    Serial.print(" | line_x : ");
-    Serial.print(line.dis_X * MOTOR.line_val);
-    // Serial.print(" | ");
-    // ball.print();
+    // Serial.print(" | line_val : ");
+    // Serial.print(MOTOR.line_val);
+    // Serial.print(" | line_x : ");
+    // Serial.print(line.dis_X * MOTOR.line_val);
+    Serial.print(" | ");
+    ball.print();
     Serial.print(" | ");
     line.print();
     // Serial.print(" | ");
