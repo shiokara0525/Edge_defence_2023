@@ -19,6 +19,10 @@ int M_time;
 int Lside_A = 0;
 int Lside_B = 999;
 timer L_;
+timer sentor_t;
+int sentor_A = 0;
+int sentor_B = 999;
+int go_flag = 0;
 
 int A = 0;
 int B = 999;
@@ -105,7 +109,7 @@ void loop() {
   int M_flag = 1; //1だったら動き続ける 0だったら止まる
   float target = Target_dir;
 
-
+  /*---------------------------------------------------------状況判断ステート--------------------------------------------------------*/
 
   c = 0;
 
@@ -132,6 +136,28 @@ void loop() {
     }
   }
 
+  if(sentor_A == 1){
+    if(sentor_A != sentor_B){
+      sentor_B = sentor_A;
+      sentor_t.reset();
+    }
+    if(3000 < sentor_t.read_ms()){
+      A = 11;
+      sentor_t.reset();
+    }
+  }
+  else{
+    if(sentor_A != sentor_B){
+      sentor_B = sentor_A;
+    }
+  }
+
+  if(A == 11){
+    if(sentor_t.read_ms() < 1000){
+      c = 1;
+    }
+  }
+
   if(A == 15){
     if(line_F != 3){
       c = 1;
@@ -155,6 +181,8 @@ void loop() {
     }
   }
 
+
+  /*---------------------------------------------------------動作ステート--------------------------------------------------------*/
 
 
   if(A == 5){
@@ -212,14 +240,25 @@ void loop() {
     else{                              //横に進むとき
       MOTOR.line_val = 0.8;
     }
-
+    sentor_A = 0;
     for(int i = 0; i < 2; i++){
       int dif_val = abs(ball.ang - go_border[i]);
       if(dif_val < stop_range && back_F == 0){  //正面方向にボールがあったら停止するよ
         M_flag = 0;
+        if(abs(ball.ang) < 30){
+          sentor_A = 1;
+        }
       }
     }
     go_ang.to_range(180,true);  //進む角度を-180 ~ 180の範囲に収める
+  }
+
+
+  if(A == 11){
+    if(A != B){
+      B = A;
+    }
+    go_ang = ball.ang;
   }
 
 
