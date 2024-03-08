@@ -15,15 +15,20 @@ motor_attack MOTOR;
 timer Timer;
 timer Main;
 int M_time;
+
+int Lside_A = 0;
+int Lside_B = 999;
 timer L_;
 
 int A = 0;
 int B = 999;
+int c = 0;
 int stop_range = 10;
 int P_range = 30;
 const int far_th = 130;
 int go_val = 180;
 int print_flag = 1;// 1だったらシリアルプリントする
+int line_F = 0;
 //======================================================きっく======================================================//
 void kick();
 timer kick_time;
@@ -100,23 +105,58 @@ void loop() {
   int M_flag = 1; //1だったら動き続ける 0だったら止まる
   float target = Target_dir;
 
-  if(line_flag == 1){
-    A = 10;
-  }
-  else{
-    if(ball.flag == 0){
-      A = 5;
+
+
+  c = 0;
+  if(A == 15){
+    if(line_F != 3){
+      c = 1;
     }
     else{
-      if(cam_back.on == 0){
+      line_F = 0;
+    }
+  }
+
+  if(45 < abs(line.ang) && abs(line.ang) < 135){
+    Lside_A = 1;
+  }
+  else{
+    Lside_A = 0;
+  }
+
+  if(Lside_A == 1){
+    if(Lside_A != Lside_B){
+      Lside_B = Lside_A;
+      L_.reset();
+    }
+    if(5000 < L_.read_ms()){
+      A = 15;
+    }
+  }
+  else{
+    if(Lside_A != Lside_B){
+      Lside_B = Lside_A;
+    }
+  }
+
+  if(c == 0){
+    if(line_flag == 1){
+      A = 10;
+      if(45 < abs(line.ang) && abs(line.ang) < 135){
         A = 15;
+        line_F = 1;
+      }
+    }
+    else{
+      if(ball.flag == 0){
+        A = 5;
       }
       else{
         A = 20;
       }
-      
     }
   }
+
 
 
   if(A == 5){
@@ -163,16 +203,11 @@ void loop() {
     if(120 < abs(go_ang.degree)){       //進む角度が真後ろにあるとき
       M_flag = 0;
     }
-    else if(110 < abs(go_ang.degree)){  //進む角度が後ろめな時
-      max_val= 50;
-      MOTOR.line_val = 2;
-    }
     else if(abs(go_ang.degree) < 60){  //前めに進むとき
       MOTOR.line_val = 2;
     }
     else{                              //横に進むとき
-      MOTOR.line_val = 0.90;
-      MOTOR.line_val = 3;
+      MOTOR.line_val = 1.0;
     }
 
     for(int i = 0; i < 2; i++){
@@ -181,7 +216,7 @@ void loop() {
         M_flag = 0;
       }
       else if(dif_val < P_range){
-        max_val= max_val / (P_range - stop_range) * (dif_val - stop_range);
+        max_val = max_val / (P_range - stop_range) * (dif_val - stop_range);
       }
     }
   }
@@ -191,10 +226,17 @@ void loop() {
     if(A != B){
       B = A;
     }
-
-    if(cam_back.side == 0){
-
+    if(line_F == 1){
+      if(line_flag == 0){
+        line_F++;
+      }
     }
+    if(line_F == 2){
+      if(line_flag == 1){
+        line_F++;
+      }
+    }
+    go_ang = cam_back.ang + 180;
   }
 
   if(A == 20){
@@ -210,9 +252,6 @@ void loop() {
   ac.dir_target = target;
   if(AC_flag == 0){
     AC_val = ac.getAC_val();
-    Serial.print(" | ");
-    Serial.print(AC_val);
-    Serial.print(" | ");
   }
   else if(AC_flag == 1){
     AC_val = ac.getCam_val(cam_front.ang) * 2;
@@ -254,13 +293,19 @@ void loop() {
   else if(M_flag == 2){
     MOTOR.moveMotor_0(go_ang,max_val,AC_val,0);
   }
+
+
   if(print_flag == 1){
     Serial.print(" | ");
     Serial.print(go_ang.degree);
+    Serial.print(" | line_val : ");
+    Serial.print(MOTOR.line_val);
+    Serial.print(" | line_x : ");
+    Serial.print(line.dis_X * MOTOR.line_val);
     // Serial.print(" | ");
     // ball.print();
-    // Serial.print(" | ");
-    // line.print();
+    Serial.print(" | ");
+    line.print();
     // Serial.print(" | ");
     // line.print_2();
     // Serial.print(" | ");
@@ -375,7 +420,6 @@ void serialEvent4(){
 
 
 void serialEvent6(){
-  L_time = L_.read_us();
   // Serial.println(" sawa3 ");
   uint8_t read[6];
   int n = 1;
@@ -410,7 +454,6 @@ void serialEvent6(){
   //   Serial.print(" ");
   // }
   // Serial.println();
-  L_.reset();
 }
 
 
