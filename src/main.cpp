@@ -156,6 +156,22 @@ void loop() {
     if(sentor_t.read_ms() < 1000){
       c = 1;
     }
+    else{
+      A = 15;
+      c = 1;
+      sentor_t.reset();
+      if(line_flag == 1){
+        line_F = 1;
+      }
+      else{
+        line_F = 2;
+      }
+    }
+
+    if(sentor_t.read_ms() < 300 && line_flag == 1){
+      c = 1;
+      line_F = 1;
+    }
   }
 
   if(A == 15){
