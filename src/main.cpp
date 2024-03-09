@@ -275,6 +275,7 @@ void loop() {
       B = A;
     }
     go_ang = ball.ang;
+    M_flag = 2;
   }
 
 
@@ -293,6 +294,7 @@ void loop() {
       }
     }
     go_ang = -cam_back.ang + 180;
+    M_flag = 2;
   }
 
   if(A == 20){
@@ -360,6 +362,8 @@ void loop() {
     Serial.print(A);
     Serial.print(" | ");
     Serial.print(go_ang.degree);
+    Serial.print(" | sentor_t : ");
+    Serial.print(sentor_t.read_ms());
     // Serial.print(" | line_val : ");
     // Serial.print(MOTOR.line_val);
     // Serial.print(" | line_x : ");
