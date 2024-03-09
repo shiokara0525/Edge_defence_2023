@@ -208,7 +208,7 @@ void loop() {
     if(A != B){
       B = A;
     }
-    M_flag = 0;
+    M_flag = 3;
   }
 
 
@@ -367,6 +367,9 @@ void loop() {
   }
   else if(M_flag == 2){
     MOTOR.moveMotor_0(go_ang,max_val,AC_val,0);
+  }
+  else if(M_flag == 3){
+    MOTOR.motor_0();
   }
 
 
