@@ -24,6 +24,8 @@ int sentor_A = 0;
 int sentor_B = 999;
 int go_flag = 0;
 
+int Bget_B = 999;
+
 int A = 0;
 int B = 999;
 int c = 0;
@@ -153,10 +155,7 @@ void loop() {
   }
 
   if(A == 11){
-    if(sentor_t.read_ms() < 1000){
-      c = 1;
-    }
-    else{
+    if(1000 < sentor_t.read_ms() && Kick_F == 0){
       A = 15;
       c = 1;
       sentor_t.reset();
@@ -167,8 +166,12 @@ void loop() {
         line_F = 2;
       }
     }
+    else{
+      c = 1;
+    }
 
-    if(sentor_t.read_ms() < 300 && line_flag == 1){
+    if(500 < sentor_t.read_ms() && line_flag == 1){
+      A = 15;
       c = 1;
       line_F = 1;
     }
@@ -254,7 +257,7 @@ void loop() {
       MOTOR.line_val = 2;
     }
     else{                              //横に進むとき
-      MOTOR.line_val = 0.8;
+      MOTOR.line_val = 1.0;
     }
     sentor_A = 0;
     for(int i = 0; i < 2; i++){
@@ -274,7 +277,20 @@ void loop() {
     if(A != B){
       B = A;
     }
-    go_ang = ball.ang;
+    go_ang = ball.ang * 2;
+    if(ball.ball_get){
+      if(ball.ball_get != Bget_B){
+        Bget_B = ball.ball_get;
+        Timer.reset();
+      }
+      if(300 < Timer.read_ms()){
+        kick_ = 1;
+        AC_flag = 1;
+      }
+    }
+    else{
+      Bget_B = 0;
+    }
     M_flag = 2;
   }
 
@@ -300,6 +316,7 @@ void loop() {
   if(A == 20){
     if(A != B){
       B = A;
+      Timer.reset();
     }
     go_ang = line.ang_old;
     M_flag = 2;
@@ -364,6 +381,8 @@ void loop() {
     Serial.print(go_ang.degree);
     Serial.print(" | sentor_t : ");
     Serial.print(sentor_t.read_ms());
+    Serial.print(" | line_F : ");
+    Serial.print(line_F);
     // Serial.print(" | line_val : ");
     // Serial.print(MOTOR.line_val);
     // Serial.print(" | line_x : ");
