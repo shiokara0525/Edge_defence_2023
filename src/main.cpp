@@ -32,7 +32,7 @@ int c = 0;
 int stop_range = 10;
 int P_range = 30;
 const int far_th = 130;
-int go_val = 180;
+int go_val = 160;
 int print_flag = 1;// 1だったらシリアルプリントする
 int line_F = 0;
 //======================================================きっく======================================================//
@@ -92,7 +92,9 @@ void setup() {
   // MOTOR.motor_ac(100);
   // delay(200);
   // MOTOR.motor_0();
-  Switch();
+  // Switch();
+  ac.setup_2();
+  Target_dir = ac.dir_n;
 }
 
 void loop() {
@@ -115,7 +117,7 @@ void loop() {
 
   c = 0;
 
-  if((45 < abs(line.ang) && abs(line.ang) < 135) && cam_back.on == 1 && cam_back.Size < 60){
+  if((45 < abs(line.ang) && abs(line.ang) < 135)){
     Lside_A = 1;
   }
   else{
@@ -311,6 +313,7 @@ void loop() {
     }
     go_ang = -cam_back.ang + 180;
     M_flag = 2;
+    max_val -= 40;
   }
 
   if(A == 20){
@@ -382,22 +385,22 @@ void loop() {
     Serial.print(A);
     Serial.print(" | ");
     Serial.print(go_ang.degree);
-    Serial.print(" | sentor_t : ");
-    Serial.print(sentor_t.read_ms());
-    Serial.print(" | line_F : ");
-    Serial.print(line_F);
+    // Serial.print(" | sentor_t : ");
+    // Serial.print(sentor_t.read_ms());
+    // Serial.print(" | line_F : ");
+    // Serial.print(line_F);
     // Serial.print(" | line_val : ");
     // Serial.print(MOTOR.line_val);
     // Serial.print(" | line_x : ");
     // Serial.print(line.dis_X * MOTOR.line_val);
     Serial.print(" | ");
     ball.print();
-    Serial.print(" | ");
-    line.print();
+    // Serial.print(" | ");
+    // line.print();
     // Serial.print(" | ");
     // line.print_2();
-    // Serial.print(" | ");
-    // ac.print();
+    Serial.print(" | ");
+    ac.print();
     // Serial.print(" | ");
     // cam_front.print();
     // Serial.print(" | ");
@@ -408,10 +411,10 @@ void loop() {
     // Serial.print(M_time);
   }
 
-  if(toogle_f != digitalRead(toogle_P)){
-    MOTOR.motor_0();
-    Switch();
-  }
+  // if(toogle_f != digitalRead(toogle_P)){
+  //   MOTOR.motor_0();
+  //   Switch();
+  // }
   Serial.println();
   M_time = Main.read_us();
 }

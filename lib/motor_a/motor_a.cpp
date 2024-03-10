@@ -113,11 +113,11 @@ void motor_attack::motor_0(){  //モーターの値を0にする関数
 
 
 float motor_attack::Moutput(int i,float Mval){
-  if(0 < Mval){
+  if(Mval < 0){
     analogWrite(PWM_p[i][0],0);
     analogWrite(PWM_p[i][1],abs(Mval));
   }
-  else if(Mval < 0){
+  else if(0 < Mval){
     analogWrite(PWM_p[i][0],abs(Mval));
     analogWrite(PWM_p[i][1],0);
   }
