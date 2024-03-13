@@ -100,29 +100,29 @@ void loop() {
   ball.getBallposition();
   cam_front.getCamdata();
   cam_back.getCamdata();
+  int line_flag = line.getLINE_Vec();  //ラインセンサの入力
+  angle go_ang(ball.ang,true);         //進む角度のオブジェクト
 
+  float AC_val = 100;                  //姿勢制御の出力
+  int max_val = go_val;                //進む出力
+  float target = Target_dir;           //目標角度
 
-  float AC_val = 100;
-  angle go_ang(ball.ang,true);
-  int max_val = go_val;
-  int line_flag = line.getLINE_Vec();
-  int AC_flag = 0; //0だったら絶対的な角度とる 1だったらゴール向く
-  int kick_ = 0; //0だったらキックしない 1だったらキック
-  int M_flag = 1; //1だったら動き続ける 0だったら止まる
-  float target = Target_dir;
+  int AC_flag = 0;                     //0だったら絶対的な角度とる 1だったらゴール向く
+  int kick_ = 0;                       //0だったらキックしない 1だったらキック
+  int M_flag = 1;                      //1だったら動き続ける 0だったら止まる
 
   /*---------------------------------------------------------状況判断ステート--------------------------------------------------------*/
 
   c = 0;
 
-  if((45 < abs(line.ang) && abs(line.ang) < 135) && cam_back.on == 1 && cam_back.Size < 60){
+  if((45 < abs(line.ang) && abs(line.ang) < 135) && cam_back.on == 1 && cam_back.Size < 60){  //横向きにラインを踏んでるフラグ
     Lside_A = 1;
   }
   else{
     Lside_A = 0;
   }
 
-  if(Lside_A == 1){
+  if(Lside_A == 1){          //(横向きにラインを踏み続けているか<=>コートの横向きのライン上にいるか)判定
     if(Lside_A != Lside_B){
       Lside_B = Lside_A;
       L_.reset();
@@ -138,7 +138,7 @@ void loop() {
     }
   }
 
-  if(sentor_A == 1){
+  if(sentor_A == 1){          //前にボールがあり続けるか判定
     if(sentor_A != sentor_B){
       sentor_B = sentor_A;
       sentor_t.reset();
@@ -154,7 +154,7 @@ void loop() {
     }
   }
 
-  if(A == 11){
+  if(A == 11){     //前進し続けるか判定
     if(1000 < sentor_t.read_ms() && Kick_F == 0){
       A = 15;
       c = 1;
@@ -177,7 +177,7 @@ void loop() {
     }
   }
 
-  if(A == 15){
+  if(A == 15){      //戻るとき後ろに下がり続けるか判定
     if(line_F != 3){
       c = 1;
     }
@@ -186,7 +186,7 @@ void loop() {
     }
   }
 
-  if(c == 0){
+  if(c == 0){  //平常時どうするか判定
     if(line_flag == 1){
       A = 10;
     }
@@ -204,7 +204,7 @@ void loop() {
   /*---------------------------------------------------------動作ステート--------------------------------------------------------*/
 
 
-  if(A == 5){
+  if(A == 5){  //ボールがない時止まる
     if(A != B){
       B = A;
     }
@@ -212,7 +212,8 @@ void loop() {
   }
 
 
-  if(A == 10){
+
+  if(A == 10){  //ライントレース(アルゴリズムブログで書きたいな)
     if(A != B){
       B = A;
     }
@@ -273,7 +274,8 @@ void loop() {
   }
 
 
-  if(A == 11){
+
+  if(A == 11){  //ボールが前にあるから前進
     if(A != B){
       B = A;
     }
@@ -295,7 +297,8 @@ void loop() {
   }
 
 
-  if(A == 15){
+
+  if(A == 15){  //ゴール際に戻る
     if(A != B){
       B = A;
     }
@@ -313,7 +316,9 @@ void loop() {
     M_flag = 2;
   }
 
-  if(A == 20){
+
+
+  if(A == 20){  //ロボットがちょっと押し出されちゃったから戻る
     if(A != B){
       B = A;
       Timer.reset();
@@ -321,6 +326,10 @@ void loop() {
     go_ang = line.ang_old;
     M_flag = 2;
   }
+
+
+
+  /*---------------------------------------------------------出力ステート--------------------------------------------------------*/
 
 
 
