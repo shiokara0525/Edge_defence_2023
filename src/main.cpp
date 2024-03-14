@@ -178,7 +178,7 @@ void loop() {
   }
 
   if(A == 15){      //戻るとき後ろに下がり続けるか判定
-    if(line_F != 3){
+    if(line_F != 4){
       c = 1;
     }
     else{
@@ -301,7 +301,11 @@ void loop() {
   if(A == 15){  //ゴール際に戻る
     if(A != B){
       B = A;
+      Timer.reset();
     }
+    go_ang = -cam_back.ang + 180;
+    M_flag = 2;
+    max_val -= 30;
     if(line_F == 1){
       if(line_flag == 0){
         line_F++;
@@ -314,9 +318,12 @@ void loop() {
       }
       digitalWrite(LED,LOW);
     }
-    go_ang = -cam_back.ang + 180;
-    M_flag = 2;
-    max_val -= 30;
+    if(line_F == 3){
+      if(300 < Timer.read_ms()){
+        line_F++;
+      }
+      go_ang = 0;
+    }
   }
 
 
