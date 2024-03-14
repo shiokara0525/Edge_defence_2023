@@ -399,10 +399,10 @@ void loop() {
     // Serial.print(line_F);
     // Serial.print(" | line_val : ");
     // Serial.print(MOTOR.line_val);
-    // Serial.print(" | line_x : ");
-    // Serial.print(line.dis_X * MOTOR.line_val);
-    Serial.print(" | ");
-    ball.print();
+    Serial.print(" | line_x : ");
+    Serial.print((-1.0 + line.dis_X) * MOTOR.line_val);
+    // Serial.print(" | ");
+    // ball.print();
     Serial.print(" | ");
     line.print();
     // Serial.print(" | ");
@@ -598,19 +598,19 @@ void serialEvent8(){
 
       x = ball.ball_x.demandAve(x);
       y = ball.ball_y.demandAve(y);
-      // for(int i = 0; i < 8; i++){
-      //   Serial.print(" ");
-      //   Serial.print(revBuf_byte[i]);
-      // }
-      // Serial.println();
+      for(int i = 0; i < 8; i++){
+        Serial.print(" ");
+        Serial.print(revBuf_byte[i]);
+      }
+      Serial.println();
     }
     else{
-      // printf("ERR_REV");
-      // for(int i = 0; i < 8; i++){
-      //   Serial.print(" ");
-      //   Serial.print(revBuf_byte[i]);
-      // }
-      // Serial.println();
+      printf("ERR_REV");
+      for(int i = 0; i < 8; i++){
+        Serial.print(" ");
+        Serial.print(revBuf_byte[i]);
+      }
+      Serial.println();
     }
   }
 
