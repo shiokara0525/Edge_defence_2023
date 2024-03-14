@@ -306,14 +306,17 @@ void loop() {
       if(line_flag == 0){
         line_F++;
       }
+      digitalWrite(LED,HIGH);
     }
     if(line_F == 2){
       if(line_flag == 1){
         line_F++;
       }
+      digitalWrite(LED,LOW);
     }
     go_ang = -cam_back.ang + 180;
     M_flag = 2;
+    max_val -= 30;
   }
 
 
@@ -366,7 +369,6 @@ void loop() {
     }
   }
 
-  digitalWrite(LED,cam_front.on);
 
   if(M_flag == 1){
     MOTOR.moveMotor_L(go_ang,max_val,AC_val,line);
@@ -391,10 +393,10 @@ void loop() {
     Serial.print(A);
     Serial.print(" | ");
     Serial.print(go_ang.degree);
-    Serial.print(" | sentor_t : ");
-    Serial.print(sentor_t.read_ms());
-    Serial.print(" | line_F : ");
-    Serial.print(line_F);
+    // Serial.print(" | sentor_t : ");
+    // Serial.print(sentor_t.read_ms());
+    // Serial.print(" | line_F : ");
+    // Serial.print(line_F);
     // Serial.print(" | line_val : ");
     // Serial.print(MOTOR.line_val);
     // Serial.print(" | line_x : ");
@@ -556,63 +558,61 @@ void serialEvent6(){
 
 
 void serialEvent8(){
-  // Serial.println("sawa4");
   int n;
   int x,y;
-  word revBuf_word[7];
-  byte revBuf_byte[7];
+  word revBuf_word[8];
+  byte revBuf_byte[8];
   //受信データ数が、一定時間同じであれば、受信完了としてデータ読み出しを開始処理を開始する。
   //受信データあり ※6バイト以上になるまでまつ
-  if(Serial8.available() < 7){
-    // Serial.print(Serial8.available());
-    return;
-  }
-
-  revBuf_byte[0] = Serial8.read();
-  if(revBuf_byte[0] != 0xFF){
-    // Serial.print("!!!!!");
-    return;
-  }
+  if(Serial8.available()>= 8){
     //---------------------------
     //受信データをバッファに格納
     //---------------------------
-    n = 1;
-  while(Serial8.available()>0 ){ //受信データがなくなるまで読み続ける
-    //6バイト目まではデータを格納、それ以上は不要なデータであるため捨てる。
-    if(n < 7){
-      revBuf_byte[n] = Serial8.read();   //revBuf_byte[n] = Serial2.read();
+    n = 0;
+    while(Serial8.available()>0 ){ //受信データがなくなるまで読み続ける
+      //6バイト目まではデータを格納、それ以上は不要なデータであるため捨てる。
+      if(n < 8){
+        revBuf_byte[n] = Serial8.read();   //revBuf_byte[n] = Serial2.read();
+      }
+      else{
+        Serial8.read(); //Serial2.read();  //読みだすのみで格納しない。
+      }
+      n++;
     }
-    else{
-      Serial8.read(); //Serial2.read();  //読みだすのみで格納しない。
-    }
-    n++;
-  }
-  // for(int i = 0; i < 7; i++){
-  //   Serial.print(revBuf_byte[i]);
-  //   Serial.print(" ");
-  // }
     //---------------------------
     //データの中身を確認
     //---------------------------
     //データの先頭、終了コードあることを確認
-  if((revBuf_byte[0] == 0xFF ) && ( revBuf_byte[6] == 0xAA )){
-  //いったんWORD型（16bitデータ）としてから、int16_tとする。
-    revBuf_word[0] = (uint16_t(revBuf_byte[1])<< 8);//上位8ビットをbyteから、Wordに型変換して格納　上位桁にするため8ビットシフト
-    revBuf_word[1] = uint16_t(revBuf_byte[2]);//下位8ビットをbyteから、Wordに型変換して格納      
-    x = int16_t(revBuf_word[0]|revBuf_word[1]);//上位8ビット、下位ビットを合成（ビットのORを取ることで格納する。）
-    // ※int ではなく　int16_t　にすることが必要。intだけだと、32ビットのintと解釈されマイナス値がマイナスとみなされなくなる、int16_tは、16ビット指定の整数型変換
-    revBuf_word[2] = (uint16_t(revBuf_byte[3])<< 8);//上位8ビットをbyteから、Wordに型変換して格納　上位桁にするため8ビットシフト
-    revBuf_word[3] = uint16_t(revBuf_byte[4]);//下位8ビットをbyteから、Wordに型変換して格納      
-    y = int16_t(revBuf_word[2]|revBuf_word[3]);//上位8ビット、下位ビットを合成（ビットのORを取ることで格納する。）
-    // ※int ではなく　int16_t　にすることが必要。intだけだと、32ビットのintと解釈されマイナス値がマイナスとみなされなくなる、int16_tは、16ビット指定の整数型変換
-    ball.get_resister(revBuf_byte[5]);
+    if((revBuf_byte[0] == 0xFF ) && ( revBuf_byte[7] == 0xAA )){
+    //いったんWORD型（16bitデータ）としてから、int16_tとする。
+      revBuf_word[0] = (uint16_t(revBuf_byte[1])<< 8);//上位8ビットをbyteから、Wordに型変換して格納　上位桁にするため8ビットシフト
+      revBuf_word[1] = uint16_t(revBuf_byte[2]);//下位8ビットをbyteから、Wordに型変換して格納      
+      x = int16_t(revBuf_word[0]|revBuf_word[1]);//上位8ビット、下位ビットを合成（ビットのORを取ることで格納する。）
+      // ※int ではなく　int16_t　にすることが必要。intだけだと、32ビットのintと解釈されマイナス値がマイナスとみなされなくなる、int16_tは、16ビット指定の整数型変換
+      revBuf_word[2] = (uint16_t(revBuf_byte[3])<< 8);//上位8ビットをbyteから、Wordに型変換して格納　上位桁にするため8ビットシフト
+      revBuf_word[3] = uint16_t(revBuf_byte[4]);//下位8ビットをbyteから、Wordに型変換して格納      
+      y = int16_t(revBuf_word[2]|revBuf_word[3]);//上位8ビット、下位ビットを合成（ビットのORを取ることで格納する。）
+      // ※int ではなく　int16_t　にすることが必要。intだけだと、32ビットのintと解釈されマイナス値がマイナスとみなされなくなる、int16_tは、16ビット指定の整数型変換
+      ball.get_resister_1(revBuf_byte[5]);
+      ball.get_resister_2(revBuf_byte[6]);
 
-    x = ball.ball_x.demandAve(x);
-    y = ball.ball_y.demandAve(y);
-    // Serial.print("!!!!!!!!!!!!!");
+      x = ball.ball_x.demandAve(x);
+      y = ball.ball_y.demandAve(y);
+      // for(int i = 0; i < 8; i++){
+      //   Serial.print(" ");
+      //   Serial.print(revBuf_byte[i]);
+      // }
+      // Serial.println();
+    }
+    else{
+      // printf("ERR_REV");
+      // for(int i = 0; i < 8; i++){
+      //   Serial.print(" ");
+      //   Serial.print(revBuf_byte[i]);
+      // }
+      // Serial.println();
+    }
   }
-  else{
-    // printf("ERR_REV");
-  }
-  
+
+
 }
