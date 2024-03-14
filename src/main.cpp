@@ -35,6 +35,7 @@ const int far_th = 130;
 int go_val = 180;
 int print_flag = 1;// 1だったらシリアルプリントする
 int line_F = 0;
+int back_Flag = 0;
 //======================================================きっく======================================================//
 void kick();
 timer kick_time;
@@ -136,6 +137,11 @@ void loop() {
     if(Lside_A != Lside_B){
       Lside_B = Lside_A;
     }
+  }
+
+  if(back_Flag == 1 && line_flag == 0){
+    A = 15;
+    line_F = 1;
   }
 
   if(sentor_A == 1){          //前にボールがあり続けるか判定
@@ -342,9 +348,15 @@ void loop() {
   /*---------------------------------------------------------出力ステート--------------------------------------------------------*/
 
 
-
+  back_Flag = 0;
   ac.dir_target = target;
-  if(AC_flag == 0){
+
+  if(30 < abs(ac.dir)){
+    AC_val = ac.getAC_val();
+    M_flag = 0;
+    back_Flag = 1;
+  }
+  else if(AC_flag == 0){
     AC_val = ac.getAC_val();
   }
   else if(AC_flag == 1){
@@ -429,6 +441,9 @@ void loop() {
   if(toogle_f != digitalRead(toogle_P)){
     MOTOR.motor_0();
     Switch();
+    A = 0;
+    sentor_t.reset();
+    L_.reset();
   }
   Serial.println();
   M_time = Main.read_us();
