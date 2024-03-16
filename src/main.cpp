@@ -197,6 +197,12 @@ void loop() {
 
   if(c == 0){  //平常時どうするか判定
     if(line_flag == 1){
+      if(cam_back.on == 1){
+        A = 10;
+      }
+      else{
+        A = 16;
+      }
       A = 10;
     }
     else{
@@ -274,7 +280,7 @@ void loop() {
       int dif_val = abs(ball.ang - go_border[i]);
       if(dif_val < stop_range && back_F == 0){  //正面方向にボールがあったら停止するよ
         M_flag = 0;
-        if(abs(ball.ang) < 30){
+        if(abs(ball.ang) < 45){
           sentor_A = 1;
         }
       }
@@ -289,6 +295,9 @@ void loop() {
       B = A;
     }
     go_ang = ball.ang * 2;
+    if(abs(ball.ang) < 20){
+      go_ang = ball.ang;
+    }
     if(ball.ball_get){
       if(ball.ball_get != Bget_B){
         Bget_B = ball.ball_get;
@@ -341,6 +350,9 @@ void loop() {
     if(A != B){
       B = A;
       Timer.reset();
+    }
+    if(1000 < Timer.read_ms()){
+      A = 11;
     }
     go_ang = line.ang_old;
     M_flag = 2;
@@ -403,12 +415,12 @@ void loop() {
     // Serial.print(line_F);
     // Serial.print(" | line_val : ");
     // Serial.print(MOTOR.line_val);
-    // Serial.print(" | ");
-    // ball.print();
+    Serial.print(" | ");
+    ball.print();
     Serial.print(" | ");
     line.print();
-    Serial.print(" | ");
-    line.print_2();
+    // Serial.print(" | ");
+    // line.print_2();
     // Serial.print(" | ");
     // ac.print();
     // Serial.print(" | ");
