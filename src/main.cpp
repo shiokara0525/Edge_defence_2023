@@ -7,11 +7,13 @@
 #include<MA.h>
 #include<timer.h>
 #include<Cam.h>
+#include<kicker.h>
 
 BALL ball;
 LINE line;
 AC ac;
 motor_attack MOTOR;
+Kicker kicker;
 timer Timer;
 timer Main;
 int M_time;
@@ -77,6 +79,7 @@ void setup() {
   cam_back.begin();
   pixels.begin();
   pixels.clear();
+  kicker.setup();
   pinMode(LED,OUTPUT);
   pinMode(K,OUTPUT);
   pinMode(C,OUTPUT);
@@ -363,31 +366,8 @@ void loop() {
     AC_val = ac.getCam_val(cam_front.ang) * 2;
   }
 
-  if(kick_ == 1){
-    if(Kick_F == 0){
-      Kick_F = 1;
-      kick_time.reset();
-    }
-  }
 
-  if(Kick_F == 1){
-    if(kick_time.read_ms() < 10){
-      digitalWrite(C,LOW);
-    }
-    else if(kick_time.read_ms() < 60){
-      digitalWrite(K,HIGH);
-      digitalWrite(LED,HIGH);
-    }
-    else if(kick_time.read_ms() < 70){
-      digitalWrite(K,LOW);
-      digitalWrite(LED,LOW);
-    }
-    else{
-      digitalWrite(C,HIGH);
-      Kick_F = 0;
-    }
-  }
-
+  kicker.run(kick_);
 
   if(M_flag == 1){
     MOTOR.moveMotor_L(go_ang,max_val,AC_val,line);
@@ -461,22 +441,6 @@ void Switch(){
   delay(100);
   while(digitalRead(toogle_P) == toogle_f);
   toogle_f = digitalRead(toogle_P);  //トグルがもげちゃったからいったんLチカでスタート
-}
-
-
-
-void kick(){
-  // esc.writeMicroseconds(1000);
-  digitalWrite(C,LOW);
-  delay(10);
-  digitalWrite(K,HIGH);
-  digitalWrite(LED,HIGH);
-  delay(10);
-  digitalWrite(K,LOW);
-  digitalWrite(LED,LOW);
-  delay(10);
-  digitalWrite(C,HIGH);
-  // MOTOR.Moutput(4,-200);
 }
 
 
