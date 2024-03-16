@@ -188,7 +188,7 @@ void LINE::print(){
 
 
 void LINE::print_2(){
-  for(int i = 0; i < 27; i++){
+  for(int i = 0; i < 24; i++){
     Serial.print(" ");
     Serial.print(data_on[i]);
   }

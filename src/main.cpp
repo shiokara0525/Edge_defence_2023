@@ -256,7 +256,7 @@ void loop() {
 
     int back_F = 0;
 
-    if(135 < abs(go_ang.degree)){       //進む角度が真後ろにあるとき
+    if(140 < abs(go_ang.degree)){       //進む角度が真後ろにあるとき
       go_ang += 180;
       back_F = 1;
     }
@@ -357,7 +357,12 @@ void loop() {
   if(30 < abs(ac.dir)){
     AC_val = ac.getAC_val();
     M_flag = 0;
-    back_Flag = 1;
+    if(abs(line.ang_old) < 90){
+      back_Flag = 0;
+    }
+    else{
+      back_Flag = 1;
+    }
   }
   else if(AC_flag == 0){
     AC_val = ac.getAC_val();
@@ -398,12 +403,12 @@ void loop() {
     // Serial.print(line_F);
     // Serial.print(" | line_val : ");
     // Serial.print(MOTOR.line_val);
+    // Serial.print(" | ");
+    // ball.print();
     Serial.print(" | ");
-    ball.print();
-    // Serial.print(" | ");
-    // line.print();
-    // Serial.print(" | ");
-    // line.print_2();
+    line.print();
+    Serial.print(" | ");
+    line.print_2();
     // Serial.print(" | ");
     // ac.print();
     // Serial.print(" | ");
