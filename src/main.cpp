@@ -38,6 +38,7 @@ int go_val = 180;
 int print_flag = 1;// 1だったらシリアルプリントする
 int line_F = 0;
 int back_Flag = 0;
+int goang_old = 0;
 //======================================================きっく======================================================//
 void kick();
 timer kick_time;
@@ -179,7 +180,7 @@ void loop() {
       c = 1;
     }
 
-    if(500 < sentor_t.read_ms() && line_flag == 1){
+    if((500 < sentor_t.read_ms() && line_flag == 1) || 45 < abs(ball.ang)){
       A = 15;
       c = 1;
       line_F = 1;
@@ -212,6 +213,10 @@ void loop() {
       else{
         A = 20;
       }
+    }
+
+    if(cam_back.on == 0){
+      A = 16;
     }
   }
 
@@ -275,6 +280,11 @@ void loop() {
     else{                              //横に進むとき
       MOTOR.line_val = 1.0;
     }
+
+    if(cam_back.on == 0){
+      A = 16;
+    }
+
     sentor_A = 0;
     for(int i = 0; i < 2; i++){
       int dif_val = abs(ball.ang - go_border[i]);
@@ -293,11 +303,9 @@ void loop() {
   if(A == 11){  //ボールが前にあるから前進
     if(A != B){
       B = A;
+      goang_old = ball.ang;
     }
-    go_ang = ball.ang * 2;
-    if(abs(ball.ang) < 20){
-      go_ang = ball.ang;
-    }
+    go_ang = ball.ang;
     if(ball.ball_get){
       if(ball.ball_get != Bget_B){
         Bget_B = ball.ball_get;
@@ -310,6 +318,10 @@ void loop() {
     }
     else{
       Bget_B = 0;
+    }
+
+    if(30 < abs(ball.ang - goang_old)){
+      A = 15;
     }
     M_flag = 2;
   }
@@ -345,13 +357,22 @@ void loop() {
   }
 
 
+  if(A == 16){
+    if(A != B){
+      B = A;
+    }
+    go_ang = 0;
+    M_flag = 2;
+  }
+
+
 
   if(A == 20){  //ロボットがちょっと押し出されちゃったから戻る
     if(A != B){
       B = A;
       Timer.reset();
     }
-    if(1000 < Timer.read_ms()){
+    if(300 < Timer.read_ms() && cam_back.Size < 60){
       A = 11;
     }
     go_ang = line.ang_old;
@@ -398,6 +419,9 @@ void loop() {
   else if(M_flag == 3){
     MOTOR.motor_0();
   }
+
+
+  digitalWrite(LED,cam_back.on);
 
 
   if(print_flag == 1){
