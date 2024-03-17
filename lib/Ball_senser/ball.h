@@ -10,13 +10,17 @@ class BALL{
         MA far__;
         MA ball_get_val_1;
         MA ball_get_val_2;
+        MA dx_;
+        uint8_t data_byte[6];
         float ang;
         float far;
         float far_old = 0;
         float x_pos;
         float y_pos;
-        int flag = 1;
+        float x_pos_old;
         float dx;
+        int flag = 1;
+        float dp;
         float far_;
         int get_val;
         int ball_get;

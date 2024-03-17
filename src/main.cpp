@@ -431,27 +431,27 @@ void loop() {
     // Serial.print(L_.read_ms());
     // Serial.print(" | Lside_A : ");
     // Serial.print(Lside_A);
-    Serial.print(" | A : ");
-    Serial.print(A);
+    // Serial.print(" | A : ");
+    // Serial.print(A);
     Serial.print(" | ");
     Serial.print(go_ang.degree);
-    Serial.print(" | sentor_t : ");
-    Serial.print(sentor_t.read_ms());
-    Serial.print(" | line_F : ");
-    Serial.print(line_F);
+    // Serial.print(" | sentor_t : ");
+    // Serial.print(sentor_t.read_ms());
+    // Serial.print(" | line_F : ");
+    // Serial.print(line_F);
     // Serial.print(" | line_val : ");
     // Serial.print(MOTOR.line_val);
-    // Serial.print(" | ");
-    // ball.print();
+    Serial.print(" | ");
+    ball.print();
     // Serial.int(" | ");
     // line.print();
-    Serial.print(" | ");
-    line.print_2();
+    // Serial.print(" | ");
+    // line.print_2();
     // Serial.print(" | ");
     // ac.print();
-    // Serial.print(" | ");
-    cam_back.print();
     Serial.print(" | ");
+    cam_back.print();
+    // Serial.print(" | ");
     // cam_back.print();
     // Serial.print(" | ");
     // Serial.print(L_time);
@@ -604,16 +604,12 @@ void serialEvent8(){
   }
 
   if(read[0] == 0xFF && read[7] == 0xAA){
-    contain[0] = (uint16_t(read[1]) << 8);
-    contain[1] = (uint16_t(read[2]));
-    x = int16_t(contain[0] | contain[1]);
-    contain[2] = (uint16_t(read[3]) << 8);
-    contain[3] = (uint16_t(read[4]));
-    y = int16_t(contain[2] | contain[3]);
-    ball.ball_x.demandAve(x);
-    ball.ball_y.demandAve(y);
-    ball.get_resister_1(read[5]);
-    ball.get_resister_2(read[6]);
+    ball.data_byte[0] = read[1];
+    ball.data_byte[1] = read[2];
+    ball.data_byte[2] = read[3];
+    ball.data_byte[3] = read[4];
+    ball.data_byte[4] = read[5];
+    ball.data_byte[5] = read[6];
   }
 
   // for(int i = 0; i < 8; i++){
