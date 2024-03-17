@@ -332,6 +332,7 @@ void loop() {
     if(A != B){
       B = A;
       Timer.reset();
+      line_F = 1;
     }
     go_ang = -cam_back.ang + 180;
     M_flag = 2;
@@ -340,19 +341,20 @@ void loop() {
       if(line_flag == 0){
         line_F++;
       }
-      digitalWrite(LED,HIGH);
+      digitalWrite(LED,LOW);
     }
     if(line_F == 2){
-      if(line_flag == 1){
+      if(line_flag == 1 && 200 < Timer.read_ms()){
         line_F++;
       }
-      digitalWrite(LED,LOW);
+      digitalWrite(LED,HIGH);
     }
     if(line_F == 3){
       if(300 < Timer.read_ms()){
         line_F++;
       }
       go_ang = 0;
+      digitalWrite(LED,LOW);
     }
   }
 
@@ -421,7 +423,7 @@ void loop() {
   }
 
 
-  digitalWrite(LED,cam_back.on);
+  // digitalWrite(LED,cam_back.on);
 
 
   if(print_flag == 1){
@@ -433,18 +435,18 @@ void loop() {
     Serial.print(A);
     Serial.print(" | ");
     Serial.print(go_ang.degree);
-    // Serial.print(" | sentor_t : ");
-    // Serial.print(sentor_t.read_ms());
-    // Serial.print(" | line_F : ");
-    // Serial.print(line_F);
+    Serial.print(" | sentor_t : ");
+    Serial.print(sentor_t.read_ms());
+    Serial.print(" | line_F : ");
+    Serial.print(line_F);
     // Serial.print(" | line_val : ");
     // Serial.print(MOTOR.line_val);
-    Serial.print(" | ");
-    ball.print();
+    // Serial.print(" | ");
+    // ball.print();
     Serial.print(" | ");
     line.print();
-    // Serial.print(" | ");
-    // line.print_2();
+    Serial.print(" | ");
+    line.print_2();
     // Serial.print(" | ");
     // ac.print();
     // Serial.print(" | ");
