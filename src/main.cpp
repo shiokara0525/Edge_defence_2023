@@ -16,6 +16,7 @@ motor_attack MOTOR;
 Kicker kicker;
 timer Timer;
 timer Main;
+timer start_t;
 int M_time;
 
 int Lside_A = 0;
@@ -198,21 +199,20 @@ void loop() {
 
   if(c == 0){  //平常時どうするか判定
     if(line_flag == 1){
-      if(cam_back.on == 1){
-        A = 10;
+      if(abs(ball.ang) < 150){
+        if(cam_back.on == 1){
+          A = 10;
+        }
+        else{
+          A = 16;
+        }
       }
       else{
-        A = 16;
-      }
-      A = 10;
-    }
-    else{
-      if(ball.flag == 0){
         A = 5;
       }
-      else{
-        A = 20;
-      }
+    }
+    else{
+      A = 20;
     }
 
     if(cam_back.on == 0){
@@ -443,15 +443,15 @@ void loop() {
     // Serial.print(MOTOR.line_val);
     // Serial.print(" | ");
     // ball.print();
-    Serial.print(" | ");
-    line.print();
+    // Serial.int(" | ");
+    // line.print();
     Serial.print(" | ");
     line.print_2();
     // Serial.print(" | ");
     // ac.print();
     // Serial.print(" | ");
-    // cam_front.print();
-    // Serial.print(" | ");
+    cam_back.print();
+    Serial.print(" | ");
     // cam_back.print();
     // Serial.print(" | ");
     // Serial.print(L_time);
@@ -465,6 +465,7 @@ void loop() {
     A = 0;
     sentor_t.reset();
     L_.reset();
+    start_t.reset();
   }
   Serial.println();
   M_time = Main.read_us();
