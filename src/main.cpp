@@ -40,36 +40,29 @@ int print_flag = 1;// 1だったらシリアルプリントする
 int line_F = 0;
 int back_Flag = 0;
 int goang_old = 0;
-//======================================================きっく======================================================//
-void kick();
-timer kick_time;
-int Kick_F = 0;
-const int C = 32;
-const int K = 31;
-int kick_flag = 0;
-//======================================================neopiku======================================================//
-#define DELAYVAL 500
-#define PIN        30 
-#define NUMPIXELS 16
 
-int Neo[16] = {12,11,10,9,8,7,6,5,4,3,2,1,0,15,14,13};
-int Neo_p = 999;
-
-Adafruit_NeoPixel pixels(DELAYVAL, PIN, NEO_GRB + NEO_KHZ800);
 //======================================================カメラ======================================================//
+
 int goal_color = 0;  //青が0 黄色が1
 Cam cam_front(4);
 Cam cam_back(3);
+int CB_old = 999;
+timer CB_t;
+
 //======================================================スタートスイッチ======================================================//
+
 int LED = 13;
 int toogle_f;
 int toogle_P = 27;
 void Switch();
 int Target_dir;
+
 //======================================================ライン======================================================//
+
 int Line_flag = 0;
 int Line_target_dir;
 int L_time;
+
 //======================================================関数たち======================================================/
 
 void setup() {
@@ -79,14 +72,8 @@ void setup() {
   ac.setup();
   cam_front.begin();
   cam_back.begin();
-  pixels.begin();
-  pixels.clear();
   kicker.setup();
   pinMode(LED,OUTPUT);
-  pinMode(K,OUTPUT);
-  pinMode(C,OUTPUT);
-  digitalWrite(C,HIGH);
-  digitalWrite(K,LOW);
   if(goal_color == 0){
     cam_front.color = 0;  //青が0 黄色が1
     cam_back.color = 1;  //青が0 黄色が1
@@ -149,6 +136,19 @@ void loop() {
     line_F = 1;
   }
 
+  if(cam_back.on == 1){
+    CB_old = 1;
+  }
+  else{
+    if(cam_back.on != CB_old){
+      CB_old = cam_back.on;
+      CB_t.reset();
+    }
+    if(1000 < CB_t.read_ms()){
+      A = 16;
+    }
+  }
+
   if(sentor_A == 1){          //前にボールがあり続けるか判定
     if(sentor_A != sentor_B){
       sentor_B = sentor_A;
@@ -166,7 +166,7 @@ void loop() {
   }
 
   if(A == 11){     //前進し続けるか判定
-    if(1000 < sentor_t.read_ms() && Kick_F == 0){
+    if(1000 < sentor_t.read_ms() && kicker.kick_flag == 0){
       A = 15;
       c = 1;
       sentor_t.reset();
