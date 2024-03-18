@@ -181,7 +181,7 @@ void loop() {
       c = 1;
     }
 
-    if((500 < sentor_t.read_ms() && line_flag == 1) || 45 < abs(ball.ang)){
+    if((300 < sentor_t.read_ms() && line_flag == 1) || 75 < abs(ball.ang)){
       A = 15;
       c = 1;
       line_F = 1;
@@ -305,7 +305,13 @@ void loop() {
       B = A;
       goang_old = ball.ang;
     }
-    go_ang = ball.ang;
+    max_val += 30; 
+    if(abs(ball.ang) < 10){
+      go_ang = 0;
+    }
+    else{
+      go_ang = ball.ang * 3;
+    }
     if(ball.ball_get){
       if(ball.ball_get != Bget_B){
         Bget_B = ball.ball_get;
