@@ -587,8 +587,6 @@ void serialEvent6(){
 
 void serialEvent8(){
   uint8_t read[8];
-  unsigned int contain[4];
-  int x,y;
   if(Serial8.available() < 8){
     return;
   }
