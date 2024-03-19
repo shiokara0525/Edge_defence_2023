@@ -35,7 +35,7 @@ int c = 0;
 int stop_range = 10;
 int P_range = 30;
 const int far_th = 130;
-int go_val = 180;
+int go_val = 210;
 int print_flag = 1;// 1だったらシリアルプリントする
 int line_F = 0;
 int back_Flag = 0;
@@ -145,7 +145,9 @@ void loop() {
       CB_t.reset();
     }
     if(1000 < CB_t.read_ms()){
-      A = 16;
+      if(line.LINE_on == 0 || (abs(line.ang) < 15 || 165 < abs(line.ang))){
+        A = 16;
+      }
     }
   }
 
@@ -200,12 +202,7 @@ void loop() {
   if(c == 0){  //平常時どうするか判定
     if(line_flag == 1){
       if(abs(ball.ang) < 150){
-        if(cam_back.on == 1){
-          A = 10;
-        }
-        else{
-          A = 16;
-        }
+        A = 10;
       }
       else{
         A = 5;
@@ -215,9 +212,11 @@ void loop() {
       A = 20;
     }
 
-    if(cam_back.on == 0){
-      A = 16;
-    }
+    // if(cam_back.on == 0){
+    //   if(!(15 < abs(line.ang) && abs(line.ang) < 165)){
+    //     A = 16;
+    //   }
+    // }
   }
 
 
@@ -267,11 +266,11 @@ void loop() {
 
     int back_F = 0;
 
-    if(140 < abs(go_ang.degree)){       //進む角度が真後ろにあるとき
+    if(150 < abs(go_ang.degree)){       //進む角度が真後ろにあるとき
       go_ang += 180;
       back_F = 1;
     }
-    else if(120 < abs(go_ang.degree)){
+    else if(135 < abs(go_ang.degree)){
       M_flag = 0;
     }
     else if(abs(go_ang.degree) < 60){  //前めに進むとき
@@ -279,10 +278,6 @@ void loop() {
     }
     else{                              //横に進むとき
       MOTOR.line_val = 1.0;
-    }
-
-    if(cam_back.on == 0){
-      A = 16;
     }
 
     sentor_A = 0;
@@ -437,8 +432,8 @@ void loop() {
     // Serial.print(L_.read_ms());
     // Serial.print(" | Lside_A : ");
     // Serial.print(Lside_A);
-    // Serial.print(" | A : ");
-    // Serial.print(A);
+    Serial.print(" | A : ");
+    Serial.print(A);
     Serial.print(" | ");
     Serial.print(go_ang.degree);
     // Serial.print(" | sentor_t : ");
