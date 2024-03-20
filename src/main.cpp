@@ -35,7 +35,7 @@ int c = 0;
 int stop_range = 10;
 int P_range = 30;
 const int far_th = 130;
-int go_val = 210;
+int go_val = 220;
 int print_flag = 1;// 1だったらシリアルプリントする
 int line_F = 0;
 int back_Flag = 0;
@@ -168,7 +168,7 @@ void loop() {
   }
 
   if(A == 11){     //前進し続けるか判定
-    if(1000 < sentor_t.read_ms() && kicker.kick_flag == 0){
+    if(500 < sentor_t.read_ms() && kicker.kick_flag == 0){
       A = 15;
       c = 1;
       sentor_t.reset();
@@ -201,11 +201,11 @@ void loop() {
 
   if(c == 0){  //平常時どうするか判定
     if(line_flag == 1){
-      if(abs(ball.ang) < 150){
-        A = 10;
+      if(150 < abs(ball.ang) && cam_back.on == 1){
+        A = 5;
       }
       else{
-        A = 5;
+        A = 10;
       }
     }
     else{
@@ -266,18 +266,30 @@ void loop() {
 
     int back_F = 0;
 
-    if(150 < abs(go_ang.degree)){       //進む角度が真後ろにあるとき
+    if(140 < abs(go_ang.degree)){       //進む角度が真後ろにあるとき
       go_ang += 180;
       back_F = 1;
     }
-    else if(135 < abs(go_ang.degree)){
+    else if(130 < abs(go_ang.degree)){
       M_flag = 0;
+    }
+    else if(105 < abs(go_ang.degree)){
+      max_val -= 60;
+      MOTOR.line_val = 1.5;
     }
     else if(abs(go_ang.degree) < 60){  //前めに進むとき
       MOTOR.line_val = 2;
     }
     else{                              //横に進むとき
-      MOTOR.line_val = 1.0;
+      MOTOR.line_val = 1.2;
+      if(cam_back.on == 0){
+        if(cam_back.ang < 0){
+          go_ang = -90;
+        }
+        else{
+          go_ang = 90;
+        }
+      }
     }
 
     sentor_A = 0;
@@ -342,20 +354,20 @@ void loop() {
       if(line_flag == 0){
         line_F++;
       }
-      digitalWrite(LED,LOW);
+      // digitalWrite(LED,LOW);
     }
     if(line_F == 2){
       if(line_flag == 1 && 200 < Timer.read_ms()){
         line_F++;
       }
-      digitalWrite(LED,HIGH);
+      // digitalWrite(LED,HIGH);
     }
     if(line_F == 3){
       if(300 < Timer.read_ms()){
         line_F++;
       }
       go_ang = 0;
-      digitalWrite(LED,LOW);
+      // digitalWrite(LED,LOW);
     }
   }
 
@@ -424,7 +436,7 @@ void loop() {
   }
 
 
-  // digitalWrite(LED,cam_back.on);
+  digitalWrite(LED,cam_back.on);
 
 
   if(print_flag == 1){
