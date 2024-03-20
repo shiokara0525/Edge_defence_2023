@@ -164,7 +164,7 @@ void loop() {
       sentor_t.reset();
     }
     if(3000 < sentor_t.read_ms()){
-      // A = 11;
+      A = 11;
       sentor_t.reset();
     }
   }
@@ -208,7 +208,7 @@ void loop() {
 
   if(c == 0){  //平常時どうするか判定
     if(line_flag == 1){
-      if(150 < abs(ball.ang) && cam_back.on == 1){
+      if(140 < abs(ball.ang) && cam_back.on == 1){
         A = 5;
       }
       else{
@@ -288,7 +288,7 @@ void loop() {
       MOTOR.line_val = 2;
     }
     else{                              //横に進むとき
-      MOTOR.line_val = 0.8;
+      MOTOR.line_val = 1.0;
       if(cam_back.on == 0){
         if(cam_back.ang < 0){
           go_ang = -90;
@@ -307,7 +307,7 @@ void loop() {
         max_val = 0;
         if(abs(ball.ang) < 45){
           sentor_A = 1;
-          if(0.5 < abs(ball.dy) || 0.5 < abs(ball.dx)){
+          if(0.7 < abs(ball.dy) || 0.7 < abs(ball.dx)){
             max_val += 50000 * abs(ball_y_.sum(ball.dy * DELTA));
             M_flag = 1;
             GOD = 1;
