@@ -9,6 +9,8 @@
 #include<Cam.h>
 #include<kicker.h>
 
+#define DELTA 0.0001
+
 BALL ball;
 LINE line;
 AC ac;
@@ -17,7 +19,10 @@ Kicker kicker;
 timer Timer;
 timer Main;
 timer start_t;
+
+MA ball_y_;
 int M_time;
+int GOD = 0;
 
 int Lside_A = 0;
 int Lside_B = 999;
@@ -74,6 +79,7 @@ void setup() {
   cam_back.begin();
   kicker.setup();
   pinMode(LED,OUTPUT);
+  ball_y_.setLenth(500);
   if(goal_color == 0){
     cam_front.color = 0;  //青が0 黄色が1
     cam_back.color = 1;  //青が0 黄色が1
@@ -95,6 +101,7 @@ void loop() {
   cam_back.getCamdata();
   int line_flag = line.getLINE_Vec();  //ラインセンサの入力
   angle go_ang(ball.ang,true);         //進む角度のオブジェクト
+  GOD = 0;
 
   float AC_val = 100;                  //姿勢制御の出力
   int max_val = go_val;                //進む出力
@@ -157,7 +164,7 @@ void loop() {
       sentor_t.reset();
     }
     if(3000 < sentor_t.read_ms()){
-      A = 11;
+      // A = 11;
       sentor_t.reset();
     }
   }
@@ -297,8 +304,27 @@ void loop() {
       int dif_val = abs(ball.ang - go_border[i]);
       if(dif_val < stop_range && back_F == 0){  //正面方向にボールがあったら停止するよ
         M_flag = 0;
+        max_val = 0;
         if(abs(ball.ang) < 45){
           sentor_A = 1;
+          if(0.3 < abs(ball.dy) || 0.3 < abs(ball.dx)){
+            max_val += 50000 * abs(ball_y_.sum(ball.dy * DELTA));
+            M_flag = 1;
+            GOD = 1;
+            if(go_val < max_val){
+              max_val = go_val;
+            }
+          }
+        }
+      }
+      else{
+        if(0.3 < abs(ball.dy) || 0.3 < abs(ball.dx)){
+          max_val += 500 * abs(ball_y_.sum(ball.dy * DELTA));
+          M_flag = 1;
+          GOD = 1;
+          if(250 < max_val){
+            max_val = 250;
+          }
         }
       }
     }
@@ -422,7 +448,6 @@ void loop() {
 
   kicker.run(kick_);
 
-  M_flag = 3;
 
   if(M_flag == 1){
     MOTOR.moveMotor_L(go_ang,max_val,AC_val,line);
@@ -438,7 +463,7 @@ void loop() {
   }
 
 
-  digitalWrite(LED,cam_back.on);
+  digitalWrite(LED,GOD);
 
 
   if(print_flag == 1){
@@ -450,6 +475,8 @@ void loop() {
     Serial.print(A);
     Serial.print(" | ");
     Serial.print(go_ang.degree);
+    Serial.print(" | val : ");
+    Serial.print(max_val);
     // Serial.print(" | sentor_t : ");
     // Serial.print(sentor_t.read_ms());
     // Serial.print(" | line_F : ");
@@ -458,6 +485,8 @@ void loop() {
     // Serial.print(MOTOR.line_val);
     Serial.print(" | ");
     ball.print();
+    Serial.print(" ball_y : ");
+    Serial.print(ball_y_.sum(ball.dy * DELTA));
     // Serial.int(" | ");
     // line.print();
     // Serial.print(" | ");

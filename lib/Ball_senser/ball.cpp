@@ -103,29 +103,29 @@ void BALL::get_resister_2(int n){
 
 
 void BALL::print(){
-    Serial.println();
-    Serial.print(">ang:");
-    Serial.println(ang);
+    // Serial.println();
+    Serial.print(" ang : ");
+    Serial.print(ang);
     Serial.print(" far : ");
-    Serial.println(far_);
+    Serial.print(far_);
     // Serial.print(" x : ");
     // Serial.print(x_pos);
     // Serial.print(" y : ");
     // Serial.print(y_pos);
-    Serial.print(">dx:");
-    Serial.println(dx);
-    Serial.print(">dy:");
-    Serial.println(dy);
-    Serial.print(">dΘ:");
-    Serial.println(d_theta);
+    Serial.print(" dx :");
+    Serial.print(dx);
+    Serial.print(" dy :");
+    Serial.print(dy);
+    // Serial.print(">dΘ:");
+    // Serial.println(d_theta);
     Serial.print(" get_val : ");
     Serial.print(get_val);
     // Serial.print(" get : ");
     // Serial.print(ball_get);
-    Serial.print(" get_1 : ");
-    Serial.print(get_1);
-    Serial.print(" get_2 : ");
-    Serial.print(get_2);
+    // Serial.print(" get_1 : ");
+    // Serial.print(get_1);
+    // Serial.print(" get_2 : ");
+    // Serial.print(get_2);
     // Serial.print(" flag : ");
     // Serial.print(flag);
 }
