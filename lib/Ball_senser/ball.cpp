@@ -4,6 +4,8 @@ BALL::BALL(){
     ball_x.setLenth(10);
     ball_y.setLenth(10);
     dx_.setLenth(300);
+    dy_.setLenth(300);
+    d_theta_.setLenth(30);
     ball_get_val_1.setLenth(50);
     ball_get_val_2.setLenth(50);
     far__.setLenth(500);
@@ -68,8 +70,24 @@ int BALL::getBallposition(){
     x_pos = x;
     y_pos = y;
     dx = dx_.demandAve((x_pos - x_pos_old) * 100);
+    dy = dy_.demandAve((y_pos - y_pos_old) * 100);
+    if(1.0 < abs(dx) || 1.0 < abs(dy)){
+        dx_dy = dx / dy;
+        d_theta = d_theta_.demandAve(degrees(atan2(dy,dx)));
+    }
+    else{
+        dx_dy = 0;
+        d_theta = 0;
+    }
+    if(dx_dy < -30){
+        dx_dy = -30;
+    }
+    else if(30 < dx_dy){
+        dx_dy = 30;
+    }
     far_old = far;
     x_pos_old = x_pos;
+    y_pos_old = y_pos;
     return flag;
 }
 
@@ -85,16 +103,21 @@ void BALL::get_resister_2(int n){
 
 
 void BALL::print(){
-    Serial.print(" ang : ");
-    Serial.print(ang);
+    Serial.println();
+    Serial.print(">ang:");
+    Serial.println(ang);
     Serial.print(" far : ");
-    Serial.print(far_);
+    Serial.println(far_);
     // Serial.print(" x : ");
     // Serial.print(x_pos);
     // Serial.print(" y : ");
     // Serial.print(y_pos);
-    Serial.print(" dx : ");
-    Serial.print(dx);
+    Serial.print(">dx:");
+    Serial.println(dx);
+    Serial.print(">dy:");
+    Serial.println(dy);
+    Serial.print(">dΘ:");
+    Serial.println(d_theta);
     Serial.print(" get_val : ");
     Serial.print(get_val);
     // Serial.print(" get : ");

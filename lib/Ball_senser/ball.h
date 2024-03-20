@@ -11,6 +11,8 @@ class BALL{
         MA ball_get_val_1;
         MA ball_get_val_2;
         MA dx_;
+        MA dy_;
+        MA d_theta_;
         uint8_t data_byte[6];
         float ang;
         float far;
@@ -18,7 +20,11 @@ class BALL{
         float x_pos;
         float y_pos;
         float x_pos_old;
+        float y_pos_old;
+        float dx_dy;
+        float d_theta;
         float dx;
+        float dy;
         int flag = 1;
         float dp;
         float far_;

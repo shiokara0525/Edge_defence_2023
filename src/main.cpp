@@ -422,6 +422,8 @@ void loop() {
 
   kicker.run(kick_);
 
+  M_flag = 3;
+
   if(M_flag == 1){
     MOTOR.moveMotor_L(go_ang,max_val,AC_val,line);
   }
@@ -462,8 +464,8 @@ void loop() {
     // line.print_2();
     // Serial.print(" | ");
     // ac.print();
-    Serial.print(" | ");
-    cam_back.print();
+    // Serial.print(" | ");
+    // cam_back.print();
     // Serial.print(" | ");
     // cam_back.print();
     // Serial.print(" | ");
