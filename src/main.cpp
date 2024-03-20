@@ -280,7 +280,7 @@ void loop() {
     else if(130 < abs(go_ang.degree)){
       M_flag = 0;
     }
-    else if(105 < abs(go_ang.degree)){
+    else if(115 < abs(go_ang.degree)){
       max_val -= 60;
       MOTOR.line_val = 1.5;
     }
@@ -288,7 +288,7 @@ void loop() {
       MOTOR.line_val = 2;
     }
     else{                              //横に進むとき
-      MOTOR.line_val = 1.2;
+      MOTOR.line_val = 0.8;
       if(cam_back.on == 0){
         if(cam_back.ang < 0){
           go_ang = -90;
@@ -307,7 +307,7 @@ void loop() {
         max_val = 0;
         if(abs(ball.ang) < 45){
           sentor_A = 1;
-          if(0.3 < abs(ball.dy) || 0.3 < abs(ball.dx)){
+          if(0.5 < abs(ball.dy) || 0.5 < abs(ball.dx)){
             max_val += 50000 * abs(ball_y_.sum(ball.dy * DELTA));
             M_flag = 1;
             GOD = 1;
@@ -319,7 +319,7 @@ void loop() {
       }
       else{
         if(0.3 < abs(ball.dy) || 0.3 < abs(ball.dx)){
-          max_val += 500 * abs(ball_y_.sum(ball.dy * DELTA));
+          max_val += 250 * abs(ball_y_.sum(ball.dy * DELTA));
           M_flag = 1;
           GOD = 1;
           if(250 < max_val){
@@ -447,6 +447,7 @@ void loop() {
 
 
   kicker.run(kick_);
+  // M_flag = 3;
 
 
   if(M_flag == 1){
@@ -489,12 +490,12 @@ void loop() {
     Serial.print(ball_y_.sum(ball.dy * DELTA));
     // Serial.int(" | ");
     // line.print();
-    // Serial.print(" | ");
-    // line.print_2();
+    Serial.print(" | ");
+    line.print_2();
     // Serial.print(" | ");
     // ac.print();
-    // Serial.print(" | ");
-    // cam_back.print();
+    Serial.print(" | ");
+    cam_back.print();
     // Serial.print(" | ");
     // cam_back.print();
     // Serial.print(" | ");
