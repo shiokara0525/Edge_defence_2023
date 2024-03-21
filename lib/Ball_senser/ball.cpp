@@ -112,10 +112,10 @@ void BALL::print(){
     // Serial.print(x_pos);
     // Serial.print(" y : ");
     // Serial.print(y_pos);
-    Serial.print(" dx :");
-    Serial.print(dx);
-    Serial.print(" dy :");
-    Serial.print(dy);
+    // Serial.print(" dx :");
+    // Serial.print(dx);
+    // Serial.print(" dy :");
+    // Serial.print(dy);
     // Serial.print(">dΘ:");
     // Serial.println(d_theta);
     Serial.print(" get_val : ");

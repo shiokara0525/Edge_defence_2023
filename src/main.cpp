@@ -49,8 +49,8 @@ int goang_old = 0;
 //======================================================カメラ======================================================//
 
 int goal_color = 0;  //青が0 黄色が1
-Cam cam_front(4);
-Cam cam_back(3);
+Cam cam_front(3);
+Cam cam_back(4);
 int CB_old = 999;
 timer CB_t;
 
@@ -464,7 +464,7 @@ void loop() {
   }
 
 
-  digitalWrite(LED,GOD);
+  digitalWrite(LED,cam_back.on);
 
 
   if(print_flag == 1){
@@ -490,14 +490,14 @@ void loop() {
     Serial.print(ball_y_.sum(ball.dy * DELTA));
     // Serial.int(" | ");
     // line.print();
-    Serial.print(" | ");
-    line.print_2();
+    // Serial.print(" | ");
+    // line.print_2();
     // Serial.print(" | ");
     // ac.print();
     Serial.print(" | ");
     cam_back.print();
-    // Serial.print(" | ");
-    // cam_back.print();
+    Serial.print(" | ");
+    cam_front.print();
     // Serial.print(" | ");
     // Serial.print(L_time);
     // Serial.print(" | ");
@@ -550,15 +550,16 @@ void serialEvent3(){
 
   if(reBuf[0] == 38 && reBuf[5] == 37){
     for(int i = 0; i < 4; i++){
-      cam_back.data_byte[i] = reBuf[i+1];
+      cam_front.data_byte[i] = reBuf[i+1];
     }
   }
 
-  // for(int i = 0; i < 6; i++){
-  //   Serial.print(" ");
-  //   Serial.print(reBuf[i]);
-  // }
-  // Serial.println();
+  Serial.print(" 3 | ");
+  for(int i = 0; i < 6; i++){
+    Serial.print(" ");
+    Serial.print(reBuf[i]);
+  }
+  Serial.println();
 }
 
 
@@ -579,14 +580,16 @@ void serialEvent4(){
 
   if(reBuf[0] == 38 && reBuf[5] == 37){
     for(int i = 0; i < 4; i++){
-      cam_front.data_byte[i] = reBuf[i+1];
+      cam_back.data_byte[i] = reBuf[i+1];
     }
   }
 
+  Serial.print(" 4 | ");
   for(int i = 0; i < 6; i++){
-    // Serial.print(" ");
-    // Serial.print(reBuf[i]);
+    Serial.print(" ");
+    Serial.print(reBuf[i]);
   }
+  Serial.println();
 }
 
 
