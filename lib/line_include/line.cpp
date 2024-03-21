@@ -36,10 +36,12 @@ int LINE::getLINE_Vec() { //ラインのベクトル(距離,角度)を取得す�
     }
   }
 
+  data_on[24] = 0;
+  data_on[25] = 0;
   data_on[26] = 0;
 
   for(int i = 0; i < 24; i++){
-    if(i == 5 || i == 15){
+    if(i == 19 || i == 20 || i == 21){
       continue;
     }
     if(flag == 0){
@@ -108,7 +110,6 @@ int LINE::getLINE_Vec() { //ラインのベクトル(距離,角度)を取得す�
   }
   else{
     LINE_on = 1;
-    ang_old = ang;
   }
   return LINE_on;
 }
@@ -174,21 +175,21 @@ void LINE::print(){
   Serial.print(ang); //ラインのベクトルを表示
   Serial.print(" 距離 : ");
   Serial.print(dis); //ラインのベクトルを表示
-  Serial.print("  X : ");
-  Serial.print(dis_X); //ラインのベクトルを表示
-  Serial.print("  Y : ");
-  Serial.print(dis_Y); //ラインのベクトルを表示
-  // Serial.print(" side : ");
-  // Serial.print(side_flag);
-  // Serial.print(" flag : ");
-  // Serial.print(line_flag);
-  // Serial.print(" A_ : ");
-  // Serial.print(A);
+  // Serial.print("  X : ");
+  // Serial.print(dis_X); //ラインのベクトルを表示
+  // Serial.print("  Y : ");
+  // Serial.print(dis_Y); //ラインのベクトルを表示
+  Serial.print(" side : ");
+  Serial.print(side_flag);
+  Serial.print(" flag : ");
+  Serial.print(line_flag);
+  Serial.print(" A_ : ");
+  Serial.print(A);
 }
 
 
 void LINE::print_2(){
-  for(int i = 0; i < 24; i++){
+  for(int i = 0; i < 27; i++){
     Serial.print(" ");
     Serial.print(data_on[i]);
   }

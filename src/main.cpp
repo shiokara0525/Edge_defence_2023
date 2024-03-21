@@ -8,6 +8,7 @@
 #include<timer.h>
 #include<Cam.h>
 #include<kicker.h>
+#include<OLED_a.h>
 
 #define DELTA 0.0001
 
@@ -15,10 +16,13 @@ BALL ball;
 LINE line;
 AC ac;
 motor_attack MOTOR;
+oled_attack OLED;
 Kicker kicker;
 timer Timer;
 timer Main;
 timer start_t;
+
+const int Tact_Switch[3] = {38,37,36};
 
 MA ball_y_;
 int M_time;
@@ -80,6 +84,13 @@ void setup() {
   kicker.setup();
   pinMode(LED,OUTPUT);
   ball_y_.setLenth(500);
+  // MOTOR.motor_ac(100);
+  // delay(200);
+  // MOTOR.motor_0();
+  OLED.setup();
+  OLED.OLED();
+  go_val = OLED.val_max;
+  goal_color = OLED.color;
   if(goal_color == 0){
     cam_front.color = 0;  //青が0 黄色が1
     cam_back.color = 1;  //青が0 黄色が1
@@ -88,10 +99,6 @@ void setup() {
     cam_front.color = 1;  //青が0 黄色が1
     cam_back.color = 0;  //青が0 黄色が1
   }
-  // MOTOR.motor_ac(100);
-  // delay(200);
-  // MOTOR.motor_0();
-  Switch();
 }
 
 void loop() {
@@ -505,9 +512,19 @@ void loop() {
     Serial.println();
   }
 
-  if(toogle_f != digitalRead(toogle_P)){
+  if(digitalReadFast(Tact_Switch[1] == LOW)){
     MOTOR.motor_0();
-    Switch();
+    OLED.OLED();
+    go_val = OLED.val_max;
+    goal_color = OLED.color;
+    if(goal_color == 0){
+      cam_front.color = 0;  //青が0 黄色が1
+      cam_back.color = 1;  //青が0 黄色が1
+    }
+    else if(goal_color == 1){
+      cam_front.color = 1;  //青が0 黄色が1
+      cam_back.color = 0;  //青が0 黄色が1
+    }
     A = 0;
     sentor_t.reset();
     L_.reset();
