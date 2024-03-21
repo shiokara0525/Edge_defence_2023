@@ -1210,8 +1210,8 @@ void oled_attack::OLED() {
       display.clearDisplay();
 
       //ボールの座標をOLED用にする（無理やりint型にしてOLEDのドットに合わせる）
-      OLED_cam_x = map((80 - cam_front.Size) * sin(radians(cam_front.ang)), -80, 80, 0, 60);  //
-      OLED_cam_y = map((80 - cam_front.Size) * cos(radians(cam_front.ang)), -80, 80, 0, 60);  //
+      OLED_cam_x = map((80 - cam_back.Size) * sin(radians(cam_back.ang)), -80, 80, 0, 60);  //
+      OLED_cam_y = map((80 - cam_back.Size) * cos(radians(cam_back.ang)), -80, 80, 0, 60);  //
 
       //ボールの位置状況マップを表示する
       display.drawCircle(32, 32, 30, WHITE);  //○ 30
@@ -1241,7 +1241,7 @@ void oled_attack::OLED() {
       display.println("Dir:");
       if(cam_front.on){  //ボールがあれば値を表示
         display.setCursor(96,24);
-        display.println(int(cam_front.ang));
+        display.println(int(cam_back.ang));
       }
       else{  //ボールがなければ白い四角形を表示
         display.fillRect(96, 24, 34, 10, WHITE);
@@ -1252,7 +1252,7 @@ void oled_attack::OLED() {
       display.println("Size:");
       if(cam_front.on){  //ボールがあれば値を表示
         display.setCursor(96,38);
-        display.println(int(cam_front.Size));
+        display.println(int(cam_back.Size));
       }
       else{  //ボールがなければ白い四角形を表示
         display.fillRect(96, 38, 34, 10, WHITE);

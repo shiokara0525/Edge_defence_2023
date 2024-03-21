@@ -23,6 +23,9 @@ timer Main;
 timer start_t;
 
 const int Tact_Switch[3] = {38,37,36};
+void OLED_moving();
+int Gang;
+int GVal;
 
 MA ball_y_;
 int M_time;
@@ -99,6 +102,7 @@ void setup() {
     cam_front.color = 1;  //青が0 黄色が1
     cam_back.color = 0;  //青が0 黄色が1
   }
+  Target_dir = ac.dir_n;
 }
 
 void loop() {
@@ -173,11 +177,23 @@ void loop() {
     if(3000 < sentor_t.read_ms()){
       A = 11;
       sentor_t.reset();
+      sentor_A = 0;
     }
   }
-  else{
+  else if(sentor_A == 0){
     if(sentor_A != sentor_B){
       sentor_B = sentor_A;
+    }
+  }
+  else if(sentor_A == 3){
+    if(sentor_A != sentor_B){
+      sentor_B = sentor_A;
+      sentor_t.reset();
+    }
+    if(300 < sentor_t.read_ms()){
+      A = 12;
+      sentor_t.reset();
+      sentor_A = 0;
     }
   }
 
@@ -201,6 +217,15 @@ void loop() {
       A = 15;
       c = 1;
       line_F = 1;
+    }
+  }
+
+  if(A == 12){
+    if(500 < Timer.read_ms() || 90 < abs(ball.ang)){
+      A = 15;
+    }
+    else{
+      c = 1;
     }
   }
 
@@ -335,6 +360,10 @@ void loop() {
         }
       }
     }
+
+    if(ball.far < 176 && abs(ball.ang) < 45){
+      sentor_A = 3;
+    }
     go_ang.to_range(180,true);  //進む角度を-180 ~ 180の範囲に収める
   }
 
@@ -369,6 +398,16 @@ void loop() {
     if(30 < abs(ball.ang - goang_old)){
       A = 15;
     }
+    M_flag = 2;
+  }
+
+
+   if(A == 12){
+    if(A != B){
+      B = A;
+      Timer.reset();
+    }
+    go_ang = ball.ang;
     M_flag = 2;
   }
 
@@ -495,14 +534,18 @@ void loop() {
     // ball.print();
     // Serial.print(" ball_y : ");
     // Serial.print(ball_y_.sum(ball.dy * DELTA));
-    // Serial.int(" | ");
+    // Serial.print(" | ");
     // line.print();
     Serial.print(" | ");
     line.print_2();
+    Serial.print(" Tact : ");
+    Serial.print(digitalReadFast(Tact_Switch[1]));
     // Serial.print(" | ");
     // ac.print();
     // Serial.print(" | ");
     // cam_back.print();
+    Serial.print(" | goang : ");
+    Serial.print(go_ang.degree);
     // Serial.print(" | ");
     // cam_front.print();
     // Serial.print(" | ");
@@ -512,9 +555,10 @@ void loop() {
     Serial.println();
   }
 
-  if(digitalReadFast(Tact_Switch[1] == LOW)){
+  if(digitalReadFast(Tact_Switch[1]) == LOW){
     MOTOR.motor_0();
     OLED.OLED();
+    Target_dir = ac.dir_n;
     go_val = OLED.val_max;
     goal_color = OLED.color;
     if(goal_color == 0){
@@ -530,6 +574,11 @@ void loop() {
     L_.reset();
     start_t.reset();
   }
+
+  if(MOTOR.NoneM_flag == 1){
+    OLED_moving();
+  }
+
   M_time = Main.read_us();
 }
 
@@ -571,13 +620,68 @@ void serialEvent3(){
     }
   }
 
-  Serial.print(" 3 | ");
-  for(int i = 0; i < 6; i++){
-    Serial.print(" ");
-    Serial.print(reBuf[i]);
-  }
-  Serial.println();
+  // Serial.print(" 3 | ");
+  // for(int i = 0; i < 6; i++){
+  //   Serial.print(" ");
+  //   Serial.print(reBuf[i]);
+  // }
+  // Serial.println();
 }
+
+
+
+void OLED_moving(){
+  //OLEDの初期化
+  OLED.display.display();
+  OLED.display.clearDisplay();
+
+  //テキストサイズと色の設定
+  OLED.display.setTextSize(1);
+  OLED.display.setTextColor(WHITE);
+  
+  OLED.display.setCursor(0,0);  //1列目
+  OLED.display.println("Gang");  //現在向いてる角度
+  OLED.display.setCursor(30,0);
+  OLED.display.println(":");
+  OLED.display.setCursor(36,0);
+  OLED.display.println(Gang);    //現在向いてる角度を表示
+
+  OLED.display.setCursor(0,10);  //2列目
+  OLED.display.println("Gval");  //この中に変数名を入力
+  OLED.display.setCursor(30,10);
+  OLED.display.println(":");
+  OLED.display.setCursor(36,10);
+  OLED.display.println(GVal);    //この中に知りたい変数を入力a
+
+  OLED.display.setCursor(0,20); //3列目 
+  OLED.display.println("Gang");  //この中に変数名を入力
+  OLED.display.setCursor(30,20);
+  OLED.display.println(":");
+  OLED.display.setCursor(36,20);
+  OLED.display.println(Gang);    //この中に知りたい変数を入力
+
+  OLED.display.setCursor(0,30); //4列目
+  OLED.display.println("A");  //この中に変数名を入力
+  OLED.display.setCursor(30,30);
+  OLED.display.println(":");
+  OLED.display.setCursor(36,30);
+  OLED.display.println(A);    //この中に知りたい変数を入力
+
+  OLED.display.setCursor(0,40); //5列目
+  OLED.display.println("Bang");  //この中に変数名を入力
+  OLED.display.setCursor(30,40);
+  OLED.display.println(":");
+  OLED.display.setCursor(36,40);
+  OLED.display.println(ball.ang);    //この中に知りたい変数を入力
+
+  OLED.display.setCursor(0,50); //6列目
+  OLED.display.println("S_F");  //この中に変数名を入力
+  OLED.display.setCursor(30,50);
+  OLED.display.println(":");
+  OLED.display.setCursor(36,50);
+  OLED.display.println(sentor_A);    //この中に知りたい変数を入力
+}
+
 
 
 
@@ -601,12 +705,12 @@ void serialEvent4(){
     }
   }
 
-  Serial.print(" 4 | ");
-  for(int i = 0; i < 6; i++){
-    Serial.print(" ");
-    Serial.print(reBuf[i]);
-  }
-  Serial.println();
+  // Serial.print(" 4 | ");
+  // for(int i = 0; i < 6; i++){
+  //   Serial.print(" ");
+  //   Serial.print(reBuf[i]);
+  // }
+  // Serial.println();
 }
 
 
