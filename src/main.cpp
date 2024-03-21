@@ -442,7 +442,7 @@ void loop() {
     AC_val = ac.getAC_val();
   }
   else if(AC_flag == 1){
-    AC_val = ac.getCam_val(cam_front.ang) * 2;
+    AC_val = ac.getCam_val(cam_front.ang);
   }
 
 
@@ -472,36 +472,37 @@ void loop() {
     // Serial.print(L_.read_ms());
     // Serial.print(" | Lside_A : ");
     // Serial.print(Lside_A);
-    Serial.print(" | A : ");
-    Serial.print(A);
-    Serial.print(" | ");
-    Serial.print(go_ang.degree);
-    Serial.print(" | val : ");
-    Serial.print(max_val);
+    // Serial.print(" | A : ");
+    // Serial.print(A);
+    // Serial.print(" | ");
+    // Serial.print(go_ang.degree);
+    // Serial.print(" | val : ");
+    // Serial.print(max_val);
     // Serial.print(" | sentor_t : ");
     // Serial.print(sentor_t.read_ms());
     // Serial.print(" | line_F : ");
     // Serial.print(line_F);
     // Serial.print(" | line_val : ");
     // Serial.print(MOTOR.line_val);
-    Serial.print(" | ");
-    ball.print();
-    Serial.print(" ball_y : ");
-    Serial.print(ball_y_.sum(ball.dy * DELTA));
+    // Serial.print(" | ");
+    // ball.print();
+    // Serial.print(" ball_y : ");
+    // Serial.print(ball_y_.sum(ball.dy * DELTA));
     // Serial.int(" | ");
     // line.print();
-    // Serial.print(" | ");
-    // line.print_2();
+    Serial.print(" | ");
+    line.print_2();
     // Serial.print(" | ");
     // ac.print();
-    Serial.print(" | ");
-    cam_back.print();
-    Serial.print(" | ");
-    cam_front.print();
+    // Serial.print(" | ");
+    // cam_back.print();
+    // Serial.print(" | ");
+    // cam_front.print();
     // Serial.print(" | ");
     // Serial.print(L_time);
     // Serial.print(" | ");
     // Serial.print(M_time);
+    Serial.println();
   }
 
   if(toogle_f != digitalRead(toogle_P)){
@@ -512,7 +513,6 @@ void loop() {
     L_.reset();
     start_t.reset();
   }
-  Serial.println();
   M_time = Main.read_us();
 }
 
