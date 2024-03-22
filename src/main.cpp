@@ -22,6 +22,8 @@ timer Timer;
 timer Main;
 timer start_t;
 
+timer A_12_t;
+
 const int Tact_Switch[3] = {38,37,36};
 void OLED_moving();
 int Gang;
@@ -102,7 +104,6 @@ void setup() {
     cam_front.color = 1;  //青が0 黄色が1
     cam_back.color = 0;  //青が0 黄色が1
   }
-  Target_dir = ac.dir_n;
 }
 
 void loop() {
@@ -192,7 +193,7 @@ void loop() {
       sentor_B = sentor_A;
       sentor_t.reset();
     }
-    if(300 < sentor_t.read_ms()){
+    if(300 < sentor_t.read_ms() && 2000 < A_12_t.read_ms()){
       A = 12;
       Timer.reset();
       sentor_t.reset();
@@ -411,6 +412,7 @@ void loop() {
     if(A != B){
       B = A;
       Timer.reset();
+      A_12_t.reset();
     }
     go_ang = ball.ang;
     M_flag = 2;
@@ -566,7 +568,6 @@ void loop() {
   if(digitalReadFast(Tact_Switch[1]) == LOW){
     MOTOR.motor_0();
     OLED.OLED();
-    Target_dir = ac.dir_n;
     go_val = OLED.val_max;
     goal_color = OLED.color;
     if(goal_color == 0){
