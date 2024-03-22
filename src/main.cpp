@@ -224,7 +224,7 @@ void loop() {
   }
 
   if(A == 12){
-    if(500 < Timer.read_ms() || 90 < abs(ball.ang)){
+    if(200 < Timer.read_ms() || 90 < abs(ball.ang)){
       A = 15;
       c = 1;
     }
@@ -526,6 +526,8 @@ void loop() {
     // Serial.print(Lside_A);
     Serial.print(" | A : ");
     Serial.print(A);
+    Serial.print(" | S_flag : ");
+    Serial.print(sentor_A);
     // Serial.print(" | ");
     // Serial.print(go_ang.degree);
     // Serial.print(" | val : ");
@@ -586,6 +588,8 @@ void loop() {
   }
 
   M_time = Main.read_us();
+  Gang = go_ang.degree;
+  GVal = max_val;
 }
 
 
@@ -603,6 +607,61 @@ void Switch(){
   while(digitalRead(toogle_P) == toogle_f);
   toogle_f = digitalRead(toogle_P);  //トグルがもげちゃったからいったんLチカでスタート
 }
+
+
+
+void OLED_moving(){
+  //OLEDの初期化
+  OLED.display.display();
+  OLED.display.clearDisplay();
+
+  //テキストサイズと色の設定
+  OLED.display.setTextSize(1);
+  OLED.display.setTextColor(WHITE);
+  
+  OLED.display.setCursor(0,0);  //1列目
+  OLED.display.println("Gang");  //現在向いてる角度
+  OLED.display.setCursor(30,0);
+  OLED.display.println(":");
+  OLED.display.setCursor(36,0);
+  OLED.display.println(Gang);    //現在向いてる角度を表示
+
+  OLED.display.setCursor(0,10);  //2列目
+  OLED.display.println("S_F");  //この中に変数名を入力
+  OLED.display.setCursor(30,10);
+  OLED.display.println(":");
+  OLED.display.setCursor(36,10);
+  OLED.display.println(sentor_A);    //この中に知りたい変数を入力a
+
+  OLED.display.setCursor(0,20); //3列目 
+  OLED.display.println("B_far");  //この中に変数名を入力
+  OLED.display.setCursor(30,20);
+  OLED.display.println(":");
+  OLED.display.setCursor(36,20);
+  OLED.display.println(ball.far);    //この中に知りたい変数を入力
+
+  OLED.display.setCursor(0,30); //4列目
+  OLED.display.println("A");  //この中に変数名を入力
+  OLED.display.setCursor(30,30);
+  OLED.display.println(":");
+  OLED.display.setCursor(36,30);
+  OLED.display.println(A);    //この中に知りたい変数を入力
+
+  OLED.display.setCursor(0,40); //5列目
+  OLED.display.println("");  //この中に変数名を入力
+  OLED.display.setCursor(30,40);
+  OLED.display.println(":");
+  OLED.display.setCursor(36,40);
+  OLED.display.println();    //この中に知りたい変数を入力
+
+  OLED.display.setCursor(0,50); //6列目
+  OLED.display.println("");  //この中に変数名を入力
+  OLED.display.setCursor(30,50);
+  OLED.display.println(":");
+  OLED.display.setCursor(36,50);
+  OLED.display.println();    //この中に知りたい変数を入力
+}
+
 
 
 
@@ -634,59 +693,6 @@ void serialEvent3(){
   // Serial.println();
 }
 
-
-
-void OLED_moving(){
-  //OLEDの初期化
-  OLED.display.display();
-  OLED.display.clearDisplay();
-
-  //テキストサイズと色の設定
-  OLED.display.setTextSize(1);
-  OLED.display.setTextColor(WHITE);
-  
-  OLED.display.setCursor(0,0);  //1列目
-  OLED.display.println("Gang");  //現在向いてる角度
-  OLED.display.setCursor(30,0);
-  OLED.display.println(":");
-  OLED.display.setCursor(36,0);
-  OLED.display.println(Gang);    //現在向いてる角度を表示
-
-  OLED.display.setCursor(0,10);  //2列目
-  OLED.display.println("Gval");  //この中に変数名を入力
-  OLED.display.setCursor(30,10);
-  OLED.display.println(":");
-  OLED.display.setCursor(36,10);
-  OLED.display.println(GVal);    //この中に知りたい変数を入力a
-
-  OLED.display.setCursor(0,20); //3列目 
-  OLED.display.println("Gang");  //この中に変数名を入力
-  OLED.display.setCursor(30,20);
-  OLED.display.println(":");
-  OLED.display.setCursor(36,20);
-  OLED.display.println(Gang);    //この中に知りたい変数を入力
-
-  OLED.display.setCursor(0,30); //4列目
-  OLED.display.println("A");  //この中に変数名を入力
-  OLED.display.setCursor(30,30);
-  OLED.display.println(":");
-  OLED.display.setCursor(36,30);
-  OLED.display.println(A);    //この中に知りたい変数を入力
-
-  OLED.display.setCursor(0,40); //5列目
-  OLED.display.println("Bang");  //この中に変数名を入力
-  OLED.display.setCursor(30,40);
-  OLED.display.println(":");
-  OLED.display.setCursor(36,40);
-  OLED.display.println(ball.ang);    //この中に知りたい変数を入力
-
-  OLED.display.setCursor(0,50); //6列目
-  OLED.display.println("S_F");  //この中に変数名を入力
-  OLED.display.setCursor(30,50);
-  OLED.display.println(":");
-  OLED.display.setCursor(36,50);
-  OLED.display.println(sentor_A);    //この中に知りたい変数を入力
-}
 
 
 
