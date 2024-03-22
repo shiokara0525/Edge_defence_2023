@@ -597,14 +597,12 @@ void oled_attack::OLED() {
         if(digitalRead(Tact_Switch[1]) == HIGH){  //タクトスイッチが手から離れたら
           if(Button_selectCF == 0)  //yellowが選択されていたら
           {
-            cam_front.color = 1;
-            cam_back.color = 2;
+            color = 1;
             A_OLED = 15;  //スタート画面に行く
           }
           else if(Button_selectCF == 2)  //blueが選択されていたら
           {
-            cam_front.color = 2;
-            cam_back.color = 1;
+            color = 0;
             A_OLED = 15;  //スタート画面に行く
           }
           else if(Button_selectCF == 1)  //exitが選択されていたら
@@ -1205,6 +1203,7 @@ void oled_attack::OLED() {
         B_OLED = A_OLED;
       };
       cam_front.getCamdata();
+      cam_back.getCamdata();
 
       display.display();
       display.clearDisplay();
@@ -1239,7 +1238,7 @@ void oled_attack::OLED() {
       //ボールの角度を表示する
       display.setCursor(68,24);
       display.println("Dir:");
-      if(cam_front.on){  //ボールがあれば値を表示
+      if(cam_back.on){  //ボールがあれば値を表示
         display.setCursor(96,24);
         display.println(int(cam_back.ang));
       }
@@ -1250,7 +1249,7 @@ void oled_attack::OLED() {
       //ボールの距離を表示する
       display.setCursor(68,38);
       display.println("Size:");
-      if(cam_front.on){  //ボールがあれば値を表示
+      if(cam_back.on){  //ボールがあれば値を表示
         display.setCursor(96,38);
         display.println(int(cam_back.Size));
       }

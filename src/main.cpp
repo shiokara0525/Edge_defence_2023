@@ -140,6 +140,7 @@ void loop() {
     }
     if(2500 < L_.read_ms()){
       A = 15;
+      c = 1;
       line_F = 1;
     }
   }
@@ -151,6 +152,7 @@ void loop() {
 
   if(back_Flag == 1 && line_flag == 0){
     A = 15;
+    c = 0;
     line_F = 1;
   }
 
@@ -192,6 +194,7 @@ void loop() {
     }
     if(300 < sentor_t.read_ms()){
       A = 12;
+      Timer.reset();
       sentor_t.reset();
       sentor_A = 0;
     }
@@ -223,6 +226,7 @@ void loop() {
   if(A == 12){
     if(500 < Timer.read_ms() || 90 < abs(ball.ang)){
       A = 15;
+      c = 1;
     }
     else{
       c = 1;
@@ -460,7 +464,8 @@ void loop() {
       Timer.reset();
     }
     if(300 < Timer.read_ms() && cam_back.Size < 60){
-      A = 11;
+      A = 15;
+      c = 1;
     }
     go_ang = line.ang_old;
     M_flag = 2;
@@ -518,8 +523,8 @@ void loop() {
     // Serial.print(L_.read_ms());
     // Serial.print(" | Lside_A : ");
     // Serial.print(Lside_A);
-    // Serial.print(" | A : ");
-    // Serial.print(A);
+    Serial.print(" | A : ");
+    Serial.print(A);
     // Serial.print(" | ");
     // Serial.print(go_ang.degree);
     // Serial.print(" | val : ");
@@ -536,8 +541,8 @@ void loop() {
     // Serial.print(ball_y_.sum(ball.dy * DELTA));
     // Serial.print(" | ");
     // line.print();
-    Serial.print(" | ");
-    line.print_2();
+    // Serial.print(" | ");
+    // line.print_2();
     Serial.print(" Tact : ");
     Serial.print(digitalReadFast(Tact_Switch[1]));
     // Serial.print(" | ");
