@@ -243,6 +243,15 @@ void loop() {
     }
   }
 
+  if(A == 20){
+    if(500 < Timer.read_ms()){
+      if(90 < abs(line.ang)){
+        A = 15;
+        c = 1;
+      }
+    }
+  }
+
   if(c == 0){  //平常時どうするか判定
     if(line_flag == 1){
       if(140 < abs(ball.ang) && cam_back.on == 1){
@@ -465,10 +474,6 @@ void loop() {
     if(A != B){
       B = A;
       Timer.reset();
-    }
-    if(300 < Timer.read_ms() && cam_back.Size < 60){
-      A = 15;
-      c = 1;
     }
     go_ang = line.ang_old;
     M_flag = 2;
