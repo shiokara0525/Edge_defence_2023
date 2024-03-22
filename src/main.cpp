@@ -51,8 +51,8 @@ int goang_old = 0;
 //======================================================カメラ======================================================//
 
 int goal_color = 0;  //青が0 黄色が1
-Cam cam_front(4);
-Cam cam_back(3);
+Cam cam_front(3);
+Cam cam_back(4);
 int CB_old = 999;
 timer CB_t;
 
@@ -552,7 +552,7 @@ void serialEvent3(){
 
   if(reBuf[0] == 38 && reBuf[5] == 37){
     for(int i = 0; i < 4; i++){
-      cam_back.data_byte[i] = reBuf[i+1];
+      cam_front.data_byte[i] = reBuf[i+1];
     }
   }
 
@@ -581,7 +581,7 @@ void serialEvent4(){
 
   if(reBuf[0] == 38 && reBuf[5] == 37){
     for(int i = 0; i < 4; i++){
-      cam_front.data_byte[i] = reBuf[i+1];
+      cam_back.data_byte[i] = reBuf[i+1];
     }
   }
 
