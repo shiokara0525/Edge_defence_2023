@@ -57,7 +57,9 @@ int BALL::getBallposition(){
         y = (y < 0 ? -150 : 150);
     }
 
-    if(30 < get_1 && 30 < get_2 && (40 < get_1 || 40 < get_2) && get_th < get_val){
+    get_val = get_1 + get_2;
+
+    if(6 < get_1 && 20 < get_2 && get_th < get_val){
         ball_get = 1;
     }
     else{

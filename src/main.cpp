@@ -54,6 +54,8 @@ int print_flag = 1;// 1だったらシリアルプリントする
 int line_F = 0;
 int back_Flag = 0;
 int goang_old = 0;
+int push_flag = 0;
+int M_F = 0;
 
 //======================================================カメラ======================================================//
 
@@ -381,6 +383,23 @@ void loop() {
     if(ball.far < 176 && abs(ball.ang) < 45){
       sentor_A = 3;
     }
+
+    if(push_flag){
+      if(ac.dir < 0){
+        if(go_ang.degree < 0){
+        }
+        else{
+          go_ang += 180;
+        }
+      }
+      else{
+        if(0 < go_ang.degree){
+        }
+        else{
+          go_ang += 180;
+        }
+      }
+    }
     go_ang.to_range(180,true);  //進む角度を-180 ~ 180の範囲に収める
   }
 
@@ -488,6 +507,7 @@ void loop() {
 
   back_Flag = 0;
   ac.dir_target = target;
+  push_flag = 0;
 
   if(30 < abs(ac.dir)){
     AC_val = ac.getAC_val() * 1.5;
@@ -498,6 +518,11 @@ void loop() {
       }
       else{
         back_Flag = 1;
+      }
+    }
+    else{
+      if(ball.ball_get){
+        push_flag = 1;
       }
     }
   }
@@ -602,6 +627,7 @@ void loop() {
   M_time = Main.read_us();
   Gang = go_ang.degree;
   GVal = max_val;
+  M_F = M_flag;
 }
 
 
@@ -646,11 +672,11 @@ void OLED_moving(){
   OLED.display.println(sentor_A);    //この中に知りたい変数を入力a
 
   OLED.display.setCursor(0,20); //3列目 
-  OLED.display.println("B_far");  //この中に変数名を入力
+  OLED.display.println("B_get");  //この中に変数名を入力
   OLED.display.setCursor(30,20);
   OLED.display.println(":");
   OLED.display.setCursor(36,20);
-  OLED.display.println(ball.far);    //この中に知りたい変数を入力
+  OLED.display.println(ball.ball_get);    //この中に知りたい変数を入力
 
   OLED.display.setCursor(0,30); //4列目
   OLED.display.println("A");  //この中に変数名を入力
@@ -660,18 +686,18 @@ void OLED_moving(){
   OLED.display.println(A);    //この中に知りたい変数を入力
 
   OLED.display.setCursor(0,40); //5列目
-  OLED.display.println("L_old");  //この中に変数名を入力
+  OLED.display.println("M_F");  //この中に変数名を入力
   OLED.display.setCursor(30,40);
   OLED.display.println(":");
   OLED.display.setCursor(36,40);
-  OLED.display.println(line.ang_old);    //この中に知りたい変数を入力
+  OLED.display.println(M_F);    //この中に知りたい変数を入力
 
   OLED.display.setCursor(0,50); //6列目
-  OLED.display.println("");  //この中に変数名を入力
+  OLED.display.println("P_f");  //この中に変数名を入力
   OLED.display.setCursor(30,50);
   OLED.display.println(":");
   OLED.display.setCursor(36,50);
-  OLED.display.println();    //この中に知りたい変数を入力
+  OLED.display.println(push_flag);    //この中に知りたい変数を入力
 }
 
 
