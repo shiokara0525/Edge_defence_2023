@@ -490,13 +490,15 @@ void loop() {
   ac.dir_target = target;
 
   if(30 < abs(ac.dir)){
-    AC_val = ac.getAC_val();
+    AC_val = ac.getAC_val() * 1.5;
     M_flag = 0;
-    if(abs(line.ang_old) < 90){
-      back_Flag = 0;
-    }
-    else{
-      back_Flag = 1;
+    if(line_flag == 0){
+      if(abs(line.ang_old) < 90){
+        back_Flag = 0;
+      }
+      else{
+        back_Flag = 1;
+      }
     }
   }
   else if(AC_flag == 0){
@@ -593,7 +595,7 @@ void loop() {
     start_t.reset();
   }
 
-  if(MOTOR.NoneM_flag == 1){
+  if(MOTOR.NoneM_flag){
     OLED_moving();
   }
 
