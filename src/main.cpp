@@ -104,6 +104,8 @@ void setup() {
     cam_front.color = 1;  //青が0 黄色が1
     cam_back.color = 0;  //青が0 黄色が1
   }
+  OLED.display.fillScreen(BLACK);
+  OLED.display.display();
 }
 
 void loop() {
@@ -583,6 +585,8 @@ void loop() {
       cam_front.color = 1;  //青が0 黄色が1
       cam_back.color = 0;  //青が0 黄色が1
     }
+    OLED.display.fillScreen(BLACK);
+    OLED.display.display();
     A = 0;
     sentor_t.reset();
     L_.reset();
@@ -654,11 +658,11 @@ void OLED_moving(){
   OLED.display.println(A);    //この中に知りたい変数を入力
 
   OLED.display.setCursor(0,40); //5列目
-  OLED.display.println("");  //この中に変数名を入力
+  OLED.display.println("L_old");  //この中に変数名を入力
   OLED.display.setCursor(30,40);
   OLED.display.println(":");
   OLED.display.setCursor(36,40);
-  OLED.display.println();    //この中に知りたい変数を入力
+  OLED.display.println(line.ang_old);    //この中に知りたい変数を入力
 
   OLED.display.setCursor(0,50); //6列目
   OLED.display.println("");  //この中に変数名を入力

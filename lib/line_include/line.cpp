@@ -107,6 +107,7 @@ int LINE::getLINE_Vec() { //ラインのベクトル(距離,角度)を取得す�
   }
   else{
     LINE_on = 1;
+    ang_old = ang;
   }
   return LINE_on;
 }
