@@ -141,7 +141,7 @@ void loop() {
       Lside_B = Lside_A;
       L_.reset();
     }
-    if(2500 < L_.read_ms()){
+    if(1500 < L_.read_ms()){
       A = 15;
       c = 1;
       line_F = 1;
@@ -204,7 +204,7 @@ void loop() {
   }
 
   if(A == 11){     //前進し続けるか判定
-    if(500 < sentor_t.read_ms() && kicker.kick_flag == 0){
+    if(200 < sentor_t.read_ms() && kicker.kick_flag == 0){
       A = 15;
       c = 1;
       sentor_t.reset();
