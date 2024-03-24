@@ -157,6 +157,7 @@ void loop() {
 
   if(back_Flag == 1 && line_flag == 0){
     A = 15;
+    Serial.print(" 15_1 !!!!!!!!!!!!!!!!!!! ");
     c = 0;
     line_F = 1;
   }
@@ -197,7 +198,7 @@ void loop() {
       sentor_B = sentor_A;
       sentor_t.reset();
     }
-    if(300 < sentor_t.read_ms() && 2000 < A_12_t.read_ms()){
+    if(300 < sentor_t.read_ms() && 2000 < A_12_t.read_ms() && ball.ball_get == 0){
       A = 12;
       Timer.reset();
       sentor_t.reset();
@@ -230,8 +231,10 @@ void loop() {
 
   if(A == 12){
     if(200 < Timer.read_ms() || 90 < abs(ball.ang)){
-      A = 15;
-      c = 1;
+      if(line_flag == 0){
+        A = 15;
+        c = 1;
+      }
     }
     else{
       c = 1;
@@ -399,6 +402,7 @@ void loop() {
           go_ang += 180;
         }
       }
+      M_flag = 1;
     }
     go_ang.to_range(180,true);  //進む角度を-180 ~ 180の範囲に収める
   }
@@ -511,18 +515,22 @@ void loop() {
 
   if(30 < abs(ac.dir)){
     AC_val = ac.getAC_val() * 1.5;
-    M_flag = 0;
     if(line_flag == 0){
       if(abs(line.ang_old) < 90){
         back_Flag = 0;
       }
       else{
         back_Flag = 1;
+        M_flag = 0;
       }
     }
     else{
       if(ball.ball_get){
+        if(abs(line.ang_old) < 90){
+          back_Flag = 0;
+        }
         push_flag = 1;
+        M_flag = 1;
       }
     }
   }
